@@ -1,0 +1,8 @@
+{
+  "symbols": ["ETHRUSDPERP", "SOLRUSDPERP"],
+  "max_order_notional": "25",
+  "max_session_notional": "100",
+  "max_slippage": "0.005",
+  "max_commands": 100,
+  "idle_timeout_s": 60
+}
