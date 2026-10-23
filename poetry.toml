@@ -1,0 +1,5 @@
+# Keep the venv at <kit-root>/.venv regardless of install method, so the
+# agent-facing invocation path (.venv/bin/python -m agent_kit.scripts.<script>)
+# is identical whether the kit was installed with install.sh, pip, or poetry.
+[virtualenvs]
+in-project = true
