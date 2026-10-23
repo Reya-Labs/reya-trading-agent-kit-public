@@ -1,0 +1,660 @@
+{
+  "description": "WorkflowStart requests: EIP-712 hashes, signatures and the service's verdict. See README.md.",
+  "domain": {
+    "name": "Reya Workflows",
+    "version": "1"
+  },
+  "domain_separator": "0xfb5e35bedf3c94b21514b955cb1ae000874eadcc5814d966fd2f252d395f1a09",
+  "primary_type": "WorkflowStart",
+  "types": {
+    "WorkflowStart": [
+      {
+        "name": "verifyingChainId",
+        "type": "uint256"
+      },
+      {
+        "name": "environment",
+        "type": "string"
+      },
+      {
+        "name": "accountId",
+        "type": "uint128"
+      },
+      {
+        "name": "versionHash",
+        "type": "bytes32"
+      },
+      {
+        "name": "allocationUsd",
+        "type": "string"
+      },
+      {
+        "name": "expiresAt",
+        "type": "uint64"
+      },
+      {
+        "name": "hostedSigner",
+        "type": "address"
+      },
+      {
+        "name": "mode",
+        "type": "string"
+      },
+      {
+        "name": "fireNow",
+        "type": "bool"
+      },
+      {
+        "name": "signer",
+        "type": "address"
+      },
+      {
+        "name": "nonce",
+        "type": "uint64"
+      },
+      {
+        "name": "deadline",
+        "type": "uint64"
+      }
+    ]
+  },
+  "encode_type": "WorkflowStart(uint256 verifyingChainId,string environment,uint128 accountId,bytes32 versionHash,string allocationUsd,uint64 expiresAt,address hostedSigner,string mode,bool fireNow,address signer,uint64 nonce,uint64 deadline)",
+  "type_hash": "0xeee09488a945cd94f038d9013afb876ba39bcc7631d2dbcf2586bda30e67110a",
+  "keys": {
+    "owner": {
+      "private_key": "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d",
+      "address": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    "agent": {
+      "private_key": "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a",
+      "address": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+    },
+    "hosted": {
+      "private_key": "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6",
+      "address": "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+    },
+    "stranger": {
+      "private_key": "0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a",
+      "address": "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65"
+    }
+  },
+  "cases": [
+    {
+      "name": "the agent key starts a shadow run on devnet1",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000123456",
+          "deadline": "1792368300"
+        },
+        "signature": "0x636ac991de1103969e9b1df2aab9ac5ca3442ce60e9116f9e2149d9ae64b9b0e1cfdd8e7fed6153ca966abc8c05f7b22554641feb7723f13395aeae52b176fa91b"
+      },
+      "struct_hash": "0x07441ff0ee3b9256ace158d1d195747bfec12c2e965eaa14f5e0c0bf41a1260b",
+      "digest": "0xb108bcc1326a99ccc67c4e323f705453a89ef12021432fddd89c4faac120e845",
+      "expect": {
+        "ok": true,
+        "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      }
+    },
+    {
+      "name": "the owner starts a production run on mainnet, firing now",
+      "context": {
+        "environment": "mainnet",
+        "now": "1792368000"
+      },
+      "signed_by": "owner",
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"mainnet\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "1729",
+          "environment": "mainnet",
+          "accountId": "123456",
+          "versionHash": "0x2db3b7bb4ed71e49e4da770eb5f9c8efab12068df56d6c53fad1c23082597589",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "production",
+          "fireNow": true,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1792368000123456",
+          "deadline": "1792368300"
+        },
+        "signature": "0xecf4f93569cbb4f536026310ffdf2a87afde58b82a74c72283e455b01b8bd959114034ef4c0df7fb5530ef138782ad30464a48873f13455413c835e529ab14951b"
+      },
+      "struct_hash": "0xb2c533b519e0cf99ee19ae5244cb6ed4eecb3a74dcc684edd31726de87c7525b",
+      "digest": "0x571eaa6b98fa815e8b95dee8c8130f0b28f7d11d88b54baac7580883af32c2ae",
+      "expect": {
+        "ok": true,
+        "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+      }
+    },
+    {
+      "name": "v as 0 or 1 reads as 27 or 28",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000123456",
+          "deadline": "1792368300"
+        },
+        "signature": "0x636ac991de1103969e9b1df2aab9ac5ca3442ce60e9116f9e2149d9ae64b9b0e1cfdd8e7fed6153ca966abc8c05f7b22554641feb7723f13395aeae52b176fa900"
+      },
+      "struct_hash": "0x07441ff0ee3b9256ace158d1d195747bfec12c2e965eaa14f5e0c0bf41a1260b",
+      "digest": "0xb108bcc1326a99ccc67c4e323f705453a89ef12021432fddd89c4faac120e845",
+      "expect": {
+        "ok": true,
+        "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      }
+    },
+    {
+      "name": "a deadline exactly ten minutes ahead",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000123456",
+          "deadline": "1792368600"
+        },
+        "signature": "0xfb6e9b93a97fcb51424c17405317315c97d841f9ad1535c7555f29ae9355500638369ea109e144de812ad51620dd3eff09f3d8311760de637fd49144b33cdd3e1b"
+      },
+      "struct_hash": "0xf345bd69e7819b1ee831981501e3af6d5eb4dd5426add049797b4d1d8e58ddc0",
+      "digest": "0xa43a13634016aa057069daf5f29ebefec55ed699d030380b2018268d3e4c2a28",
+      "expect": {
+        "ok": true,
+        "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      }
+    },
+    {
+      "name": "signed under the order domain",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000123456",
+          "deadline": "1792368300"
+        },
+        "signature": "0x0d13d3eed7d716544fb2e29c2d4b7c98afc4c969730cd4a73280d918fddccb14637f49edee11e5bc6aa8de224489bd832b70d16610dedc3e8a415e46f05f8dc71c"
+      },
+      "struct_hash": "0x07441ff0ee3b9256ace158d1d195747bfec12c2e965eaa14f5e0c0bf41a1260b",
+      "digest": "0xb108bcc1326a99ccc67c4e323f705453a89ef12021432fddd89c4faac120e845",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "signed under domain version 2",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000123456",
+          "deadline": "1792368300"
+        },
+        "signature": "0x1e5f241dfaef67380c0a36247dae164bbf612636cd74dd2428fa781bd867add5187bff157285917fdede85b5474c059a21df7fc2238b59030c7dd8326a88975c1c"
+      },
+      "struct_hash": "0x07441ff0ee3b9256ace158d1d195747bfec12c2e965eaa14f5e0c0bf41a1260b",
+      "digest": "0xb108bcc1326a99ccc67c4e323f705453a89ef12021432fddd89c4faac120e845",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "a high s",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000123456",
+          "deadline": "1792368300"
+        },
+        "signature": "0x636ac991de1103969e9b1df2aab9ac5ca3442ce60e9116f9e2149d9ae64b9b0ee30227180129eac3569954373fa084dc65689ae7f7d66128867773a7a51ed1981c"
+      },
+      "struct_hash": "0x07441ff0ee3b9256ace158d1d195747bfec12c2e965eaa14f5e0c0bf41a1260b",
+      "digest": "0xb108bcc1326a99ccc67c4e323f705453a89ef12021432fddd89c4faac120e845",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "signer names the owner, the agent key signed",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": false,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1792368000123456",
+          "deadline": "1792368300"
+        },
+        "signature": "0x17798bdf5dbb40338bb3a16ba3565b2b5582543da875e44d003810c6719508b31e431ad278875edbace988d7ebe88768c57619c93cddd608f1ea0216a331a2831b"
+      },
+      "struct_hash": "0xb41e2293afde0ad68b196ece1d96a3232c3bae32a0f44fb0688823b52259931d",
+      "digest": "0x807608ae892413e64da8c0628345294ebd3b083cb748cbaa07ecd738e7d89db3",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "a 64-byte signature",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000123456",
+          "deadline": "1792368300"
+        },
+        "signature": "0x636ac991de1103969e9b1df2aab9ac5ca3442ce60e9116f9e2149d9ae64b9b0e1cfdd8e7fed6153ca966abc8c05f7b22554641feb7723f13395aeae52b176fa9"
+      },
+      "struct_hash": "0x07441ff0ee3b9256ace158d1d195747bfec12c2e965eaa14f5e0c0bf41a1260b",
+      "digest": "0xb108bcc1326a99ccc67c4e323f705453a89ef12021432fddd89c4faac120e845",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "v of 29",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000123456",
+          "deadline": "1792368300"
+        },
+        "signature": "0x636ac991de1103969e9b1df2aab9ac5ca3442ce60e9116f9e2149d9ae64b9b0e1cfdd8e7fed6153ca966abc8c05f7b22554641feb7723f13395aeae52b176fa91d"
+      },
+      "struct_hash": "0x07441ff0ee3b9256ace158d1d195747bfec12c2e965eaa14f5e0c0bf41a1260b",
+      "digest": "0xb108bcc1326a99ccc67c4e323f705453a89ef12021432fddd89c4faac120e845",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "testnet named on a devnet1 service",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "testnet",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000123456",
+          "deadline": "1792368300"
+        },
+        "signature": "0x0d71a2d3c3ed4e5e5269085d3ea9aaf57eb52e49082646dcda06f2cf305c0f556c57ce2ee8d53f97e8bb1d73f0f8f55659d61831949085c8f24fed76345332441b"
+      },
+      "struct_hash": "0x2487e62e1365632799c3b6ad3b444aa35a9fd4d55976108780927c3bdd9c7453",
+      "digest": "0xbd6388777422e3b33592f7e136ef20af8fbdf94af65b9ab50d158249a9cf43fe",
+      "expect": {
+        "error": "WRONG_ENVIRONMENT"
+      }
+    },
+    {
+      "name": "the mainnet chain named on a devnet1 service",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "1729",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000123456",
+          "deadline": "1792368300"
+        },
+        "signature": "0xb18e9e6568fa9c57ca8aed8fc6961701bd9f0b3b8ffd9f6c0a8aa2ec2bc4aa5c4cb0592072427a2410735bfaccbaa88238dc46a30696fef40b74771a679109111c"
+      },
+      "struct_hash": "0x743f27dfc3c2774fbea83cfe1f3c78fd8a523203ecbd0e4b183abab1f3d56534",
+      "digest": "0xe097ad17fe594fccfea940db9c74960903b487c1ac42c89251915866ba44f339",
+      "expect": {
+        "error": "WRONG_ENVIRONMENT"
+      }
+    },
+    {
+      "name": "a deadline equal to now",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000123456",
+          "deadline": "1792368000"
+        },
+        "signature": "0xbd1684673ebf1f5ec39e3ff1f8a36ed1109dc0b884d342b634b6f7965927090145b219ba6da72c7f04730952dd0c7572d8656276717bf02576a90c2ec7653f5e1b"
+      },
+      "struct_hash": "0x1ae526b0863363f7619f6fa036c6e61a96078b8528e104f6c87b5bba2dfc83ad",
+      "digest": "0x8b3bb383c6bd364fc936583db7d02b8f6ba6534b49a85c5ff25a097086719c08",
+      "expect": {
+        "error": "REQUEST_EXPIRED"
+      }
+    },
+    {
+      "name": "a deadline 601 seconds ahead",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000123456",
+          "deadline": "1792368601"
+        },
+        "signature": "0x5f1d189db32a73a98e63e1ca48940ed7f8007ab1bdf7cdb8bbc894acc6dbc88b08286fb2ee37381da29de32d51928fd77220fe9dd82cc1d1136ed0327489f4ec1b"
+      },
+      "struct_hash": "0xcedfc7215ff6da175ec9c90146e6fd085cd19bdab8f0fc44a9842836ce598cd8",
+      "digest": "0x1c229c870b91c130459b6f5ce47a8bd13f806d97273a2c14364c5190d9d7e333",
+      "expect": {
+        "error": "DEADLINE_TOO_FAR"
+      }
+    },
+    {
+      "name": "a nonce with a leading zero",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "0123",
+          "deadline": "1792368300"
+        },
+        "signature": "0x636ac991de1103969e9b1df2aab9ac5ca3442ce60e9116f9e2149d9ae64b9b0e1cfdd8e7fed6153ca966abc8c05f7b22554641feb7723f13395aeae52b176fa91b"
+      },
+      "expect": {
+        "error": "INVALID_REQUEST"
+      }
+    },
+    {
+      "name": "an allocation that is not canonical",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200.0",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000123456",
+          "deadline": "1792368300"
+        },
+        "signature": "0x636ac991de1103969e9b1df2aab9ac5ca3442ce60e9116f9e2149d9ae64b9b0e1cfdd8e7fed6153ca966abc8c05f7b22554641feb7723f13395aeae52b176fa91b"
+      },
+      "expect": {
+        "error": "INVALID_REQUEST"
+      }
+    },
+    {
+      "name": "an unknown mode",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "live",
+          "fireNow": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000123456",
+          "deadline": "1792368300"
+        },
+        "signature": "0x636ac991de1103969e9b1df2aab9ac5ca3442ce60e9116f9e2149d9ae64b9b0e1cfdd8e7fed6153ca966abc8c05f7b22554641feb7723f13395aeae52b176fa91b"
+      },
+      "expect": {
+        "error": "INVALID_REQUEST"
+      }
+    },
+    {
+      "name": "an unknown field",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000123456",
+          "deadline": "1792368300",
+          "market": "BTCRUSDPERP"
+        },
+        "signature": "0x636ac991de1103969e9b1df2aab9ac5ca3442ce60e9116f9e2149d9ae64b9b0e1cfdd8e7fed6153ca966abc8c05f7b22554641feb7723f13395aeae52b176fa91b"
+      },
+      "expect": {
+        "error": "INVALID_REQUEST"
+      }
+    },
+    {
+      "name": "fireNow as a string",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "body": {
+        "document": "{\"account_id\":\"123456\",\"environment\":\"devnet1\",\"limits\":{\"allocation_usd\":\"200\",\"expires_at\":1792886400,\"price_bound_bps\":25},\"market\":\"BTCRUSDPERP\",\"protection\":{\"kind\":\"whole_position_stop\",\"trigger_px\":\"85000\"},\"schema\":\"reya.workflow/1\",\"steps\":[{\"action\":{\"kind\":\"buy\",\"notional_usd\":\"25\"},\"conditions\":[{\"kind\":\"funding_avg\",\"op\":\"lt\",\"pct_per_hour\":\"0.001\"}],\"id\":\"entry\",\"next\":null,\"repeat\":\"each_crossing\",\"trigger\":{\"direction\":\"down\",\"kind\":\"price_cross\",\"level\":\"90000\",\"source\":\"mark\"}}],\"template\":{\"id\":\"conditioned_purchase\",\"version\":1}}",
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "versionHash": "0x01acd3dacd8bade677190dcd377dc848fe1359a44f6b2b955603818328e37fe5",
+          "allocationUsd": "200",
+          "expiresAt": "1792886400",
+          "hostedSigner": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+          "mode": "shadow",
+          "fireNow": "false",
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000123456",
+          "deadline": "1792368300"
+        },
+        "signature": "0x636ac991de1103969e9b1df2aab9ac5ca3442ce60e9116f9e2149d9ae64b9b0e1cfdd8e7fed6153ca966abc8c05f7b22554641feb7723f13395aeae52b176fa91b"
+      },
+      "expect": {
+        "error": "INVALID_REQUEST"
+      }
+    }
+  ]
+}
