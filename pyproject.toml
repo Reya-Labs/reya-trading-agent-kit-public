@@ -1,0 +1,89 @@
+[project]
+name = "reya-trading-agent-kit"
+version = "0.12.31"
+description = "A skill that lets AI agents trade perpetual futures on Reya DEX"
+authors = [
+    { name = "Reya Labs" }
+]
+readme = "README.md"
+license = "MIT"
+keywords = ["reya", "trading", "agent", "ai", "defi", "perpetuals"]
+requires-python = ">=3.12,<4.0"
+# Static PEP-508 dependencies so any installer works (pip, uv, poetry) — not
+# poetry-only [tool.poetry.dependencies]. The kit imports `from sdk...`; the
+# SDK exposes a top-level `sdk` package, so this git dependency makes every
+# import resolve unchanged. Bump the tag to upgrade (then `make lock`).
+dependencies = [
+    "reya-python-sdk @ git+https://github.com/Reya-Labs/reya-python-sdk.git@v3.6.3.0",
+    "python-dotenv>=1.1.1,<2.0.0",
+]
+
+[project.urls]
+homepage = "https://github.com/Reya-Labs/reya-trading-agent-kit"
+repository = "https://github.com/Reya-Labs/reya-trading-agent-kit"
+
+[tool.poetry]
+packages = [
+    { include = "agent_kit" },
+]
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=8.0.0,<9.0.0"
+pytest-asyncio = ">=0.23.0,<=1.1.0"
+black = ">=24.7.0,<26.0.0"
+isort = ">=5.12.0,<6.0.0"
+flake8 = ">=7.0.0,<8.0.0"
+mypy = ">=1.14.1,<2.0.0"
+pyyaml = ">=6.0,<7.0"
+types-pyyaml = "^6.0.12.20260518"
+
+[build-system]
+requires = ["poetry-core>=2.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+py_version = 312
+line_length = 120
+known_typing = ["typing", "types", "typing_extensions", "mypy", "mypy_extensions"]
+# Pin classification so results don't depend on the venv or cwd: `sdk` is the
+# installed reya-python-sdk git dependency (third-party, it was once vendored
+# in-repo); agent_kit/examples are this repo's own packages.
+known_first_party = ["agent_kit", "examples"]
+known_third_party = ["sdk"]
+sections = ["FUTURE", "TYPING", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+include_trailing_comma = true
+profile = "black"
+multi_line_output = 3
+indent = 4
+
+[tool.mypy]
+python_version = "3.12"
+# The in-project .venv (created by install.sh / poetry.toml) is not our code.
+exclude = '(^|/)\.venv/'
+pretty = true
+ignore_missing_imports = true
+implicit_reexport = true
+check_untyped_defs = true
+no_implicit_optional = true
+strict_equality = true
+strict_optional = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unused_ignores = true
+show_error_codes = true
+
+# `sdk` is an installed dependency (generated OpenAPI client); don't lint its internals.
+[[tool.mypy.overrides]]
+module = "sdk.*"
+ignore_errors = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
+# No test needs more than a few seconds: one still running after 60 s prints every thread's
+# stack, so a hang shows where it waits before CI's 15-minute job timeout stops it.
+faulthandler_timeout = 60

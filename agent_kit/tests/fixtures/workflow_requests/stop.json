@@ -1,0 +1,237 @@
+{
+  "description": "WorkflowStop requests: EIP-712 hashes, signatures and the service's verdict. See README.md.",
+  "domain": {
+    "name": "Reya Workflows",
+    "version": "1"
+  },
+  "domain_separator": "0xfb5e35bedf3c94b21514b955cb1ae000874eadcc5814d966fd2f252d395f1a09",
+  "primary_type": "WorkflowStop",
+  "types": {
+    "WorkflowStop": [
+      {
+        "name": "verifyingChainId",
+        "type": "uint256"
+      },
+      {
+        "name": "environment",
+        "type": "string"
+      },
+      {
+        "name": "accountId",
+        "type": "uint128"
+      },
+      {
+        "name": "runId",
+        "type": "uint64"
+      },
+      {
+        "name": "signer",
+        "type": "address"
+      },
+      {
+        "name": "nonce",
+        "type": "uint64"
+      },
+      {
+        "name": "deadline",
+        "type": "uint64"
+      }
+    ]
+  },
+  "encode_type": "WorkflowStop(uint256 verifyingChainId,string environment,uint128 accountId,uint64 runId,address signer,uint64 nonce,uint64 deadline)",
+  "type_hash": "0x5afe8fa41e3bba810dc8bfa33e26110ae1e798c132207a34def123ada008e845",
+  "keys": {
+    "owner": {
+      "private_key": "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d",
+      "address": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    "agent": {
+      "private_key": "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a",
+      "address": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+    },
+    "hosted": {
+      "private_key": "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6",
+      "address": "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+    },
+    "stranger": {
+      "private_key": "0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a",
+      "address": "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65"
+    }
+  },
+  "cases": [
+    {
+      "name": "the agent key stops run 42",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "runId": "42",
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000654321",
+          "deadline": "1792368300"
+        },
+        "signature": "0xbc48db94d9e0962fba51e5b35e3d3543560b55db4d78476659cdfd81e0fbd12261dc921ad4a40d53de3ab64edc89141cd920858ae5dad0e870f83a12d7fe930f1c"
+      },
+      "struct_hash": "0x94d2cf0d45fc3cb88bd58a8597121721f596e376e7900472f4bc63cc8faef6f1",
+      "digest": "0x27c074c3b5d2c6d287d01beeff74b9ea735a978c66c6aa99f72794074df63974",
+      "expect": {
+        "ok": true,
+        "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      }
+    },
+    {
+      "name": "the owner stops run 42",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "owner",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "runId": "42",
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1792368000654321",
+          "deadline": "1792368300"
+        },
+        "signature": "0xe174d71ae95e19ee88c0f0d8ff5fb978672dcc89f05a1094abeb6c6b0f9d42cd424d8c3ed547e2721933a1cf4338a99f69112193a118c363518443434be59f6a1b"
+      },
+      "struct_hash": "0x414117719e1e5897bc29529b7ee3ecd209b87ded0581e1e9fdc95fc945132f06",
+      "digest": "0x32c7fe7bbf7b48de44d460751ef0b6577e984008751c514767f93eb452c54701",
+      "expect": {
+        "ok": true,
+        "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+      }
+    },
+    {
+      "name": "a signature over run 41 sent for run 42",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "runId": "42",
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000654321",
+          "deadline": "1792368300"
+        },
+        "signature": "0xfb9faa7862a69429ce13f6c5813b4cc586249eaabd5f8d7d990a27e6f81c9f22478a2ac8305f7cf648b052a7d7cab5046c4546013fbb8e464160ed5055b174831c"
+      },
+      "struct_hash": "0x94d2cf0d45fc3cb88bd58a8597121721f596e376e7900472f4bc63cc8faef6f1",
+      "digest": "0x27c074c3b5d2c6d287d01beeff74b9ea735a978c66c6aa99f72794074df63974",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "a high s",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "runId": "42",
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000654321",
+          "deadline": "1792368300"
+        },
+        "signature": "0xbc48db94d9e0962fba51e5b35e3d3543560b55db4d78476659cdfd81e0fbd1229e236de52b5bf2ac21c549b12376ebe1e18e575bc96dcf534eda2479f837ae321b"
+      },
+      "struct_hash": "0x94d2cf0d45fc3cb88bd58a8597121721f596e376e7900472f4bc63cc8faef6f1",
+      "digest": "0x27c074c3b5d2c6d287d01beeff74b9ea735a978c66c6aa99f72794074df63974",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "mainnet named on a devnet1 service",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "request": {
+          "verifyingChainId": "1729",
+          "environment": "mainnet",
+          "accountId": "123456",
+          "runId": "42",
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000654321",
+          "deadline": "1792368300"
+        },
+        "signature": "0xd1f830e7cfa7febae8eabba70afe5a17477ae2aa0730deb973f9a8ad7c1491f87b65e1f56ef0e996668d91765f37fbd82a1d0b306164cde749faa000105074041b"
+      },
+      "struct_hash": "0x5ccddfb5468c0e2f10e1fd00114b4076b55fad78268338114eb60d724ee27ef1",
+      "digest": "0x754e087eee504306f3a78c2333c294743e15b3fea648c2c2a7c82f98d3c685dc",
+      "expect": {
+        "error": "WRONG_ENVIRONMENT"
+      }
+    },
+    {
+      "name": "a deadline equal to now",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "runId": "42",
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000654321",
+          "deadline": "1792368000"
+        },
+        "signature": "0x9cfea7ce15b07106ef88728732da8e81456de7d9b42e8e13e7ec89fc2cf4a42d0cb8c2de85704b5a6e8932014c56632a870b36f58c7675c33e1b631d12fcd7ac1c"
+      },
+      "struct_hash": "0x71813f6d44600f23549924c7c3aacef0d2ce6f21b8377a4ac931d03625d0ef28",
+      "digest": "0x067d798df275817e57f4194093dc4e8a700330ecdf54a62bd8a8486bf8ff3836",
+      "expect": {
+        "error": "REQUEST_EXPIRED"
+      }
+    },
+    {
+      "name": "a negative run ID",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "runId": "-1",
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000654321",
+          "deadline": "1792368300"
+        },
+        "signature": "0xbc48db94d9e0962fba51e5b35e3d3543560b55db4d78476659cdfd81e0fbd12261dc921ad4a40d53de3ab64edc89141cd920858ae5dad0e870f83a12d7fe930f1c"
+      },
+      "expect": {
+        "error": "INVALID_REQUEST"
+      }
+    }
+  ]
+}
