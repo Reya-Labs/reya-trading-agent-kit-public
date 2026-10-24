@@ -1,0 +1,344 @@
+{
+  "description": "WorkflowStop requests: EIP-712 hashes, signatures and the service's verdict. See README.md.",
+  "domain": {
+    "name": "Reya Workflows",
+    "version": "1"
+  },
+  "domain_separator": "0xfb5e35bedf3c94b21514b955cb1ae000874eadcc5814d966fd2f252d395f1a09",
+  "primary_type": "WorkflowStop",
+  "types": {
+    "WorkflowStop": [
+      {
+        "name": "verifyingChainId",
+        "type": "uint256"
+      },
+      {
+        "name": "environment",
+        "type": "string"
+      },
+      {
+        "name": "accountId",
+        "type": "uint128"
+      },
+      {
+        "name": "runId",
+        "type": "uint64"
+      },
+      {
+        "name": "keepPosition",
+        "type": "bool"
+      },
+      {
+        "name": "signer",
+        "type": "address"
+      },
+      {
+        "name": "nonce",
+        "type": "uint64"
+      },
+      {
+        "name": "deadline",
+        "type": "uint64"
+      }
+    ]
+  },
+  "encode_type": "WorkflowStop(uint256 verifyingChainId,string environment,uint128 accountId,uint64 runId,bool keepPosition,address signer,uint64 nonce,uint64 deadline)",
+  "type_hash": "0x6f088e6e90acce4e76c618b98816b1b5605585a8d9168d1d47e891b856c2b115",
+  "keys": {
+    "owner": {
+      "private_key": "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d",
+      "address": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    "agent": {
+      "private_key": "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a",
+      "address": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+    },
+    "hosted": {
+      "private_key": "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6",
+      "address": "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+    },
+    "stranger": {
+      "private_key": "0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a",
+      "address": "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65"
+    }
+  },
+  "cases": [
+    {
+      "name": "the agent key stops run 42 and closes",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "runId": "42",
+          "keepPosition": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000654321",
+          "deadline": "1792368300"
+        },
+        "signature": "0x6afb8ec809da302d321e806df9d01fe23462a1f7859182bdbfdb8c6a0b7d0eff2b8417199923090f6c2a8ef1bd0f31c3e433c4a9b86a142e7db7609f9ea4f0cf1c"
+      },
+      "struct_hash": "0xd50330081d1134e09c94aecf6a6cdb57f8b57c92e47572af16a802acde0a63e3",
+      "digest": "0x43ea50092a2d3da975f188c02344bdbd6e3d67766730559a7a94a51d73f69311",
+      "expect": {
+        "ok": true,
+        "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+        "keep_position": false
+      }
+    },
+    {
+      "name": "the owner stops run 42 and keeps the position",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "owner",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "runId": "42",
+          "keepPosition": true,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1792368000654321",
+          "deadline": "1792368300"
+        },
+        "signature": "0x6f87113d5d7946612c3608fb2f608860f346965fd61039e0341625b3985d59f165850593eca80030d47a794c703487329736e8c2c2db4aeea9f2744d30f0a4c41c"
+      },
+      "struct_hash": "0xd6f90743dfa7d97c910ce47e5dab81cea8dd1d75c2d2db15cf64c75c22deaffd",
+      "digest": "0x31a73bbbfd382720aa82a730ff135e726f9a360c987f027591ea0999215d9fb1",
+      "expect": {
+        "ok": true,
+        "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+        "keep_position": true
+      }
+    },
+    {
+      "name": "a stop signed to keep the position, sent to close",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "runId": "42",
+          "keepPosition": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000654321",
+          "deadline": "1792368300"
+        },
+        "signature": "0xf0d1ac5acecbf1ca9cb46705d249639a5d1238e196278863aaba606e9242574131e7b7a465c02a75ad286b08c2e766cb6a8c428bf9426e6b40fe641665da47151b"
+      },
+      "struct_hash": "0xd50330081d1134e09c94aecf6a6cdb57f8b57c92e47572af16a802acde0a63e3",
+      "digest": "0x43ea50092a2d3da975f188c02344bdbd6e3d67766730559a7a94a51d73f69311",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "a signature over run 41 sent for run 42",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "runId": "42",
+          "keepPosition": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000654321",
+          "deadline": "1792368300"
+        },
+        "signature": "0x4dc65ed7d7fbdd57958b2f9a1387552a77c919f7922a47d079ba7b054c386abd12fb7401f59db45530d4909cb5a01215ab109f791d8aed9a337597ffecff88bd1b"
+      },
+      "struct_hash": "0xd50330081d1134e09c94aecf6a6cdb57f8b57c92e47572af16a802acde0a63e3",
+      "digest": "0x43ea50092a2d3da975f188c02344bdbd6e3d67766730559a7a94a51d73f69311",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "a high s",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "runId": "42",
+          "keepPosition": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000654321",
+          "deadline": "1792368300"
+        },
+        "signature": "0x6afb8ec809da302d321e806df9d01fe23462a1f7859182bdbfdb8c6a0b7d0effd47be8e666dcf6f093d5710e42f0ce3ad67b183cf6de8c0d421afded319150721b"
+      },
+      "struct_hash": "0xd50330081d1134e09c94aecf6a6cdb57f8b57c92e47572af16a802acde0a63e3",
+      "digest": "0x43ea50092a2d3da975f188c02344bdbd6e3d67766730559a7a94a51d73f69311",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "mainnet named on a devnet1 service",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "request": {
+          "verifyingChainId": "1729",
+          "environment": "mainnet",
+          "accountId": "123456",
+          "runId": "42",
+          "keepPosition": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000654321",
+          "deadline": "1792368300"
+        },
+        "signature": "0x9f34ddf3f121ec456243467acf7d95feeb9cdee2fda7ae29e9537aec5e629b1f2eeb457965a1bc15358558c471210c509492450a76d59d27e594a0be8664c0cf1c"
+      },
+      "struct_hash": "0x526c672b3bbd7fc2d86ab7ab1c3dac2d1a603579106594e3dd4e10b2952bf542",
+      "digest": "0xee5ba8068b21cb217a634aee814dd5300b94628bfcbd164b118cc607479c19e3",
+      "expect": {
+        "error": "WRONG_ENVIRONMENT"
+      }
+    },
+    {
+      "name": "a deadline equal to now",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "runId": "42",
+          "keepPosition": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000654321",
+          "deadline": "1792368000"
+        },
+        "signature": "0x3c12d819a1e8d562505741d21f5eb137bf80419313f78d03892cd7c4c1b060ab211523264a6b488167e26ef5c3fe774101bccbb503ab76fa7aec5744228cf2a41c"
+      },
+      "struct_hash": "0xa4d486e5ec40c6ed0296a780fca6af30c92f6932f099da89b424c7aa22e74fb4",
+      "digest": "0xaf82248724aed9acbe6a0e73cd5300442bc8724f43048268dc3143d5cedec6b9",
+      "expect": {
+        "error": "REQUEST_EXPIRED"
+      }
+    },
+    {
+      "name": "a negative run ID",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "runId": "-1",
+          "keepPosition": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000654321",
+          "deadline": "1792368300"
+        },
+        "signature": "0x6afb8ec809da302d321e806df9d01fe23462a1f7859182bdbfdb8c6a0b7d0eff2b8417199923090f6c2a8ef1bd0f31c3e433c4a9b86a142e7db7609f9ea4f0cf1c"
+      },
+      "expect": {
+        "error": "INVALID_REQUEST"
+      }
+    },
+    {
+      "name": "a stop without keepPosition",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "runId": "42",
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000654321",
+          "deadline": "1792368300"
+        },
+        "signature": "0x6afb8ec809da302d321e806df9d01fe23462a1f7859182bdbfdb8c6a0b7d0eff2b8417199923090f6c2a8ef1bd0f31c3e433c4a9b86a142e7db7609f9ea4f0cf1c"
+      },
+      "expect": {
+        "error": "INVALID_REQUEST"
+      }
+    },
+    {
+      "name": "keepPosition as a string",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "runId": "42",
+          "keepPosition": "false",
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000654321",
+          "deadline": "1792368300"
+        },
+        "signature": "0x6afb8ec809da302d321e806df9d01fe23462a1f7859182bdbfdb8c6a0b7d0eff2b8417199923090f6c2a8ef1bd0f31c3e433c4a9b86a142e7db7609f9ea4f0cf1c"
+      },
+      "expect": {
+        "error": "INVALID_REQUEST"
+      }
+    },
+    {
+      "name": "keepPosition null",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "runId": "42",
+          "keepPosition": null,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1792368000654321",
+          "deadline": "1792368300"
+        },
+        "signature": "0x6afb8ec809da302d321e806df9d01fe23462a1f7859182bdbfdb8c6a0b7d0eff2b8417199923090f6c2a8ef1bd0f31c3e433c4a9b86a142e7db7609f9ea4f0cf1c"
+      },
+      "expect": {
+        "error": "INVALID_REQUEST"
+      }
+    }
+  ]
+}
