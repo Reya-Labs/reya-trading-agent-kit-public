@@ -1,0 +1,145 @@
+{
+  "name": "basket_at_start",
+  "description": "The basket example, reading (b): buy BTC and SOL at the start, and rest a short of ETH at 3,000.",
+  "request": {
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "params": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "allocation_usd": "2000",
+      "expires_at": 1793504800,
+      "trigger": {
+        "kind": "start"
+      },
+      "entry": {
+        "orders": [
+          {
+            "type": "immediate",
+            "market": "BTCRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "500"
+            },
+            "stop": "80000"
+          },
+          {
+            "type": "immediate",
+            "market": "SOLRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "500"
+            }
+          },
+          {
+            "type": "resting",
+            "market": "ETHRUSDPERP",
+            "side": "sell",
+            "size": {
+              "usd": "1000"
+            },
+            "price": {
+              "fixed": "3000"
+            },
+            "stop": "3300"
+          }
+        ]
+      },
+      "repeat": "once"
+    }
+  },
+  "document": {
+    "schema": "reya.workflow/2",
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "envelope": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "markets": [
+        "BTCRUSDPERP",
+        "ETHRUSDPERP",
+        "SOLRUSDPERP"
+      ],
+      "allocation_usd": "2000",
+      "expires_at": 1793504800,
+      "price_bound_bps": 25,
+      "max_resting_orders": 20
+    },
+    "signals": {
+      "start": {
+        "kind": "start"
+      }
+    },
+    "actions": {
+      "entry": {
+        "kind": "orders",
+        "on_partial": "keep",
+        "on_stop": "keep_others",
+        "orders": [
+          {
+            "id": "o1",
+            "market": "BTCRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "500"
+            },
+            "stop": "80000"
+          },
+          {
+            "id": "o2",
+            "market": "SOLRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "500"
+            }
+          }
+        ]
+      },
+      "entry_resting": {
+        "kind": "limit_orders",
+        "keep": false,
+        "on_stop": "keep_others",
+        "orders": [
+          {
+            "id": "r1",
+            "market": "ETHRUSDPERP",
+            "side": "sell",
+            "size": {
+              "usd": "1000"
+            },
+            "price": {
+              "fixed": "3000"
+            },
+            "post_only": true,
+            "stop": "3300"
+          }
+        ]
+      }
+    },
+    "start": "waiting",
+    "states": {
+      "waiting": {
+        "on": [
+          {
+            "when": "start",
+            "if": [],
+            "do": [
+              "entry",
+              "entry_resting"
+            ],
+            "go": "done"
+          }
+        ]
+      },
+      "done": {
+        "on": []
+      }
+    }
+  },
+  "canonical": "{\"actions\":{\"entry\":{\"kind\":\"orders\",\"on_partial\":\"keep\",\"on_stop\":\"keep_others\",\"orders\":[{\"id\":\"o1\",\"market\":\"BTCRUSDPERP\",\"side\":\"buy\",\"size\":{\"usd\":\"500\"},\"stop\":\"80000\"},{\"id\":\"o2\",\"market\":\"SOLRUSDPERP\",\"side\":\"buy\",\"size\":{\"usd\":\"500\"}}]},\"entry_resting\":{\"keep\":false,\"kind\":\"limit_orders\",\"on_stop\":\"keep_others\",\"orders\":[{\"id\":\"r1\",\"market\":\"ETHRUSDPERP\",\"post_only\":true,\"price\":{\"fixed\":\"3000\"},\"side\":\"sell\",\"size\":{\"usd\":\"1000\"},\"stop\":\"3300\"}]}},\"envelope\":{\"account_id\":\"567\",\"allocation_usd\":\"2000\",\"environment\":\"devnet1\",\"expires_at\":1793504800,\"markets\":[\"BTCRUSDPERP\",\"ETHRUSDPERP\",\"SOLRUSDPERP\"],\"max_resting_orders\":20,\"price_bound_bps\":25},\"schema\":\"reya.workflow/2\",\"signals\":{\"start\":{\"kind\":\"start\"}},\"start\":\"waiting\",\"states\":{\"done\":{\"on\":[]},\"waiting\":{\"on\":[{\"do\":[\"entry\",\"entry_resting\"],\"go\":\"done\",\"if\":[],\"when\":\"start\"}]}},\"template\":{\"id\":\"basket\",\"version\":1}}",
+  "version_hash": "0xae5c5ee1f2a4859b2647192ad3fcc3d8494bc6535280a5b4067485735fad448b"
+}
