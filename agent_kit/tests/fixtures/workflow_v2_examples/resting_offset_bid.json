@@ -1,0 +1,103 @@
+{
+  "name": "resting_offset_bid",
+  "description": "Every Wednesday at 15:00 UTC, rest a $100 ETH buy 50 bps under the mark, maker or taker.",
+  "request": {
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "params": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "allocation_usd": "500",
+      "expires_at": 1793504800,
+      "trigger": {
+        "kind": "at",
+        "cadence": "weekly",
+        "day": "wed",
+        "time": "15:00"
+      },
+      "entry": {
+        "orders": [
+          {
+            "type": "resting",
+            "market": "ETHRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "100"
+            },
+            "price": {
+              "offset_bps": -50
+            },
+            "post_only": false
+          }
+        ]
+      },
+      "repeat": "each"
+    }
+  },
+  "document": {
+    "schema": "reya.workflow/2",
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "envelope": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "markets": [
+        "ETHRUSDPERP"
+      ],
+      "allocation_usd": "500",
+      "expires_at": 1793504800,
+      "price_bound_bps": 25,
+      "max_resting_orders": 20
+    },
+    "signals": {
+      "schedule": {
+        "kind": "at",
+        "cadence": "weekly",
+        "time": "15:00",
+        "day": "wed"
+      }
+    },
+    "actions": {
+      "entry_resting": {
+        "kind": "limit_orders",
+        "keep": false,
+        "on_stop": "keep_others",
+        "orders": [
+          {
+            "id": "r1",
+            "market": "ETHRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "100"
+            },
+            "price": {
+              "offset_bps": -50
+            },
+            "post_only": false
+          }
+        ]
+      }
+    },
+    "start": "waiting",
+    "states": {
+      "waiting": {
+        "on": [
+          {
+            "when": "schedule",
+            "if": [],
+            "do": [
+              "entry_resting"
+            ],
+            "go": "waiting"
+          }
+        ]
+      }
+    }
+  },
+  "canonical": "{\"actions\":{\"entry_resting\":{\"keep\":false,\"kind\":\"limit_orders\",\"on_stop\":\"keep_others\",\"orders\":[{\"id\":\"r1\",\"market\":\"ETHRUSDPERP\",\"post_only\":false,\"price\":{\"offset_bps\":-50},\"side\":\"buy\",\"size\":{\"usd\":\"100\"}}]}},\"envelope\":{\"account_id\":\"567\",\"allocation_usd\":\"500\",\"environment\":\"devnet1\",\"expires_at\":1793504800,\"markets\":[\"ETHRUSDPERP\"],\"max_resting_orders\":20,\"price_bound_bps\":25},\"schema\":\"reya.workflow/2\",\"signals\":{\"schedule\":{\"cadence\":\"weekly\",\"day\":\"wed\",\"kind\":\"at\",\"time\":\"15:00\"}},\"start\":\"waiting\",\"states\":{\"waiting\":{\"on\":[{\"do\":[\"entry_resting\"],\"go\":\"waiting\",\"if\":[],\"when\":\"schedule\"}]}},\"template\":{\"id\":\"basket\",\"version\":1}}",
+  "version_hash": "0x2491ee254ec18155ed972b011de640e633942f913946bf9d9b4b954a215f05f1"
+}

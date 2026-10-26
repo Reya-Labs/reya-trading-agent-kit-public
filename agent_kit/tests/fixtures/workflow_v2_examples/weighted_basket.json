@@ -1,0 +1,154 @@
+{
+  "name": "weighted_basket",
+  "description": "Every day at 14:00 UTC, while BTC funding is below 0.001%/h, buy $1,000 split 50/30/20 across BTC, ETH and SOL.",
+  "request": {
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "params": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "allocation_usd": "3000",
+      "expires_at": 1793504800,
+      "trigger": {
+        "kind": "at",
+        "cadence": "daily",
+        "time": "14:00"
+      },
+      "if": [
+        {
+          "kind": "funding_avg",
+          "market": "BTCRUSDPERP",
+          "op": "below",
+          "level": "0.001"
+        }
+      ],
+      "entry": {
+        "total_usd": "1000",
+        "orders": [
+          {
+            "type": "immediate",
+            "market": "BTCRUSDPERP",
+            "side": "buy",
+            "size": {
+              "weight": "0.5"
+            },
+            "stop": "80000"
+          },
+          {
+            "type": "immediate",
+            "market": "ETHRUSDPERP",
+            "side": "buy",
+            "size": {
+              "weight": "0.3"
+            },
+            "stop": "2500"
+          },
+          {
+            "type": "immediate",
+            "market": "SOLRUSDPERP",
+            "side": "buy",
+            "size": {
+              "weight": "0.2"
+            },
+            "stop": "120"
+          }
+        ]
+      },
+      "repeat": "each"
+    }
+  },
+  "document": {
+    "schema": "reya.workflow/2",
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "envelope": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "markets": [
+        "BTCRUSDPERP",
+        "ETHRUSDPERP",
+        "SOLRUSDPERP"
+      ],
+      "allocation_usd": "3000",
+      "expires_at": 1793504800,
+      "price_bound_bps": 25,
+      "max_resting_orders": 20
+    },
+    "signals": {
+      "schedule": {
+        "kind": "at",
+        "cadence": "daily",
+        "time": "14:00"
+      },
+      "if_1_value": {
+        "kind": "funding_avg",
+        "market": "BTCRUSDPERP"
+      },
+      "if_1": {
+        "kind": "below",
+        "input": "if_1_value",
+        "level": "0.001"
+      }
+    },
+    "actions": {
+      "entry": {
+        "kind": "orders",
+        "on_partial": "keep",
+        "on_stop": "keep_others",
+        "orders": [
+          {
+            "id": "o1",
+            "market": "BTCRUSDPERP",
+            "side": "buy",
+            "size": {
+              "weight": "0.5"
+            },
+            "stop": "80000"
+          },
+          {
+            "id": "o2",
+            "market": "ETHRUSDPERP",
+            "side": "buy",
+            "size": {
+              "weight": "0.3"
+            },
+            "stop": "2500"
+          },
+          {
+            "id": "o3",
+            "market": "SOLRUSDPERP",
+            "side": "buy",
+            "size": {
+              "weight": "0.2"
+            },
+            "stop": "120"
+          }
+        ],
+        "total_usd": "1000"
+      }
+    },
+    "start": "waiting",
+    "states": {
+      "waiting": {
+        "on": [
+          {
+            "when": "schedule",
+            "if": [
+              "if_1"
+            ],
+            "do": [
+              "entry"
+            ],
+            "go": "waiting"
+          }
+        ]
+      }
+    }
+  },
+  "canonical": "{\"actions\":{\"entry\":{\"kind\":\"orders\",\"on_partial\":\"keep\",\"on_stop\":\"keep_others\",\"orders\":[{\"id\":\"o1\",\"market\":\"BTCRUSDPERP\",\"side\":\"buy\",\"size\":{\"weight\":\"0.5\"},\"stop\":\"80000\"},{\"id\":\"o2\",\"market\":\"ETHRUSDPERP\",\"side\":\"buy\",\"size\":{\"weight\":\"0.3\"},\"stop\":\"2500\"},{\"id\":\"o3\",\"market\":\"SOLRUSDPERP\",\"side\":\"buy\",\"size\":{\"weight\":\"0.2\"},\"stop\":\"120\"}],\"total_usd\":\"1000\"}},\"envelope\":{\"account_id\":\"567\",\"allocation_usd\":\"3000\",\"environment\":\"devnet1\",\"expires_at\":1793504800,\"markets\":[\"BTCRUSDPERP\",\"ETHRUSDPERP\",\"SOLRUSDPERP\"],\"max_resting_orders\":20,\"price_bound_bps\":25},\"schema\":\"reya.workflow/2\",\"signals\":{\"if_1\":{\"input\":\"if_1_value\",\"kind\":\"below\",\"level\":\"0.001\"},\"if_1_value\":{\"kind\":\"funding_avg\",\"market\":\"BTCRUSDPERP\"},\"schedule\":{\"cadence\":\"daily\",\"kind\":\"at\",\"time\":\"14:00\"}},\"start\":\"waiting\",\"states\":{\"waiting\":{\"on\":[{\"do\":[\"entry\"],\"go\":\"waiting\",\"if\":[\"if_1\"],\"when\":\"schedule\"}]}},\"template\":{\"id\":\"basket\",\"version\":1}}",
+  "version_hash": "0x7df1b6e511c80b40e6b048cd08f6f356325ea5c3c1eaf9ce7a37c0abaa101614"
+}
