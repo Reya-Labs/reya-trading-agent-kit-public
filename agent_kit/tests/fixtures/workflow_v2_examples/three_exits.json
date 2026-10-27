@@ -1,0 +1,169 @@
+{
+  "name": "three_exits",
+  "description": "Buy ETH when it falls to 2,800, with a take-profit at the 3,200 target, then close on that target, on a +10% price move, or after 3 days.",
+  "request": {
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "params": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "allocation_usd": "2000",
+      "expires_at": 1793504800,
+      "trigger": {
+        "kind": "price",
+        "market": "ETHRUSDPERP",
+        "direction": "down",
+        "level": "2800"
+      },
+      "entry": {
+        "orders": [
+          {
+            "type": "immediate",
+            "market": "ETHRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "1000"
+            },
+            "stop": "2500"
+          }
+        ]
+      },
+      "exit": {
+        "target": {
+          "market": "ETHRUSDPERP",
+          "direction": "up",
+          "level": "3200"
+        },
+        "profit_pct": "10",
+        "after_secs": 259200
+      },
+      "repeat": "once"
+    }
+  },
+  "document": {
+    "schema": "reya.workflow/2",
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "envelope": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "markets": [
+        "ETHRUSDPERP"
+      ],
+      "allocation_usd": "2000",
+      "expires_at": 1793504800,
+      "price_bound_bps": 25,
+      "max_resting_orders": 20
+    },
+    "signals": {
+      "trigger_mark": {
+        "kind": "mark",
+        "market": "ETHRUSDPERP"
+      },
+      "trigger": {
+        "kind": "crosses",
+        "input": "trigger_mark",
+        "direction": "down",
+        "level": "2800"
+      },
+      "exit_target_mark": {
+        "kind": "mark",
+        "market": "ETHRUSDPERP"
+      },
+      "exit_target": {
+        "kind": "crosses",
+        "input": "exit_target_mark",
+        "direction": "up",
+        "level": "3200"
+      },
+      "exit_profit_value": {
+        "kind": "own_profit_pct"
+      },
+      "exit_profit": {
+        "kind": "crosses",
+        "input": "exit_profit_value",
+        "direction": "up",
+        "level": "10"
+      },
+      "exit_after": {
+        "kind": "elapsed",
+        "after_secs": 259200
+      }
+    },
+    "actions": {
+      "entry": {
+        "kind": "orders",
+        "on_partial": "keep",
+        "on_stop": "keep_others",
+        "orders": [
+          {
+            "id": "o1",
+            "market": "ETHRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "1000"
+            },
+            "stop": "2500",
+            "take_profit": "3200"
+          }
+        ]
+      },
+      "exit_close": {
+        "kind": "close_own",
+        "markets": "all"
+      }
+    },
+    "start": "waiting",
+    "states": {
+      "waiting": {
+        "on": [
+          {
+            "when": "trigger",
+            "if": [],
+            "do": [
+              "entry"
+            ],
+            "go": "in_trade"
+          }
+        ]
+      },
+      "in_trade": {
+        "on": [
+          {
+            "when": "exit_target",
+            "if": [],
+            "do": [
+              "exit_close"
+            ],
+            "go": "done"
+          },
+          {
+            "when": "exit_profit",
+            "if": [],
+            "do": [
+              "exit_close"
+            ],
+            "go": "done"
+          },
+          {
+            "when": "exit_after",
+            "if": [],
+            "do": [
+              "exit_close"
+            ],
+            "go": "done"
+          }
+        ]
+      },
+      "done": {
+        "on": []
+      }
+    }
+  },
+  "canonical": "{\"actions\":{\"entry\":{\"kind\":\"orders\",\"on_partial\":\"keep\",\"on_stop\":\"keep_others\",\"orders\":[{\"id\":\"o1\",\"market\":\"ETHRUSDPERP\",\"side\":\"buy\",\"size\":{\"usd\":\"1000\"},\"stop\":\"2500\",\"take_profit\":\"3200\"}]},\"exit_close\":{\"kind\":\"close_own\",\"markets\":\"all\"}},\"envelope\":{\"account_id\":\"567\",\"allocation_usd\":\"2000\",\"environment\":\"devnet1\",\"expires_at\":1793504800,\"markets\":[\"ETHRUSDPERP\"],\"max_resting_orders\":20,\"price_bound_bps\":25},\"schema\":\"reya.workflow/2\",\"signals\":{\"exit_after\":{\"after_secs\":259200,\"kind\":\"elapsed\"},\"exit_profit\":{\"direction\":\"up\",\"input\":\"exit_profit_value\",\"kind\":\"crosses\",\"level\":\"10\"},\"exit_profit_value\":{\"kind\":\"own_profit_pct\"},\"exit_target\":{\"direction\":\"up\",\"input\":\"exit_target_mark\",\"kind\":\"crosses\",\"level\":\"3200\"},\"exit_target_mark\":{\"kind\":\"mark\",\"market\":\"ETHRUSDPERP\"},\"trigger\":{\"direction\":\"down\",\"input\":\"trigger_mark\",\"kind\":\"crosses\",\"level\":\"2800\"},\"trigger_mark\":{\"kind\":\"mark\",\"market\":\"ETHRUSDPERP\"}},\"start\":\"waiting\",\"states\":{\"done\":{\"on\":[]},\"in_trade\":{\"on\":[{\"do\":[\"exit_close\"],\"go\":\"done\",\"if\":[],\"when\":\"exit_target\"},{\"do\":[\"exit_close\"],\"go\":\"done\",\"if\":[],\"when\":\"exit_profit\"},{\"do\":[\"exit_close\"],\"go\":\"done\",\"if\":[],\"when\":\"exit_after\"}]},\"waiting\":{\"on\":[{\"do\":[\"entry\"],\"go\":\"in_trade\",\"if\":[],\"when\":\"trigger\"}]}},\"template\":{\"id\":\"basket\",\"version\":1}}",
+  "version_hash": "0xd06cd68736021510a529ef4d224ccf2b40594eea50df5daadebae762bceb5881"
+}
