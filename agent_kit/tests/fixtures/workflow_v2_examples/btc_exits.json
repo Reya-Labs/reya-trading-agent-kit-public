@@ -1,0 +1,169 @@
+{
+  "name": "btc_exits",
+  "description": "Buy BTC when it falls to 88,000, with a take-profit at the 96,000 target, then close on that target, on a +5% price move, or after 2 days.",
+  "request": {
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "params": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "allocation_usd": "2000",
+      "expires_at": 1793504800,
+      "trigger": {
+        "kind": "price",
+        "market": "BTCRUSDPERP",
+        "direction": "down",
+        "level": "88000"
+      },
+      "entry": {
+        "orders": [
+          {
+            "type": "immediate",
+            "market": "BTCRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "1000"
+            },
+            "stop": "80000"
+          }
+        ]
+      },
+      "exit": {
+        "target": {
+          "market": "BTCRUSDPERP",
+          "direction": "up",
+          "level": "96000"
+        },
+        "profit_pct": "5",
+        "after_secs": 172800
+      },
+      "repeat": "once"
+    }
+  },
+  "document": {
+    "schema": "reya.workflow/2",
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "envelope": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "markets": [
+        "BTCRUSDPERP"
+      ],
+      "allocation_usd": "2000",
+      "expires_at": 1793504800,
+      "price_bound_bps": 25,
+      "max_resting_orders": 20
+    },
+    "signals": {
+      "trigger_mark": {
+        "kind": "mark",
+        "market": "BTCRUSDPERP"
+      },
+      "trigger": {
+        "kind": "crosses",
+        "input": "trigger_mark",
+        "direction": "down",
+        "level": "88000"
+      },
+      "exit_target_mark": {
+        "kind": "mark",
+        "market": "BTCRUSDPERP"
+      },
+      "exit_target": {
+        "kind": "crosses",
+        "input": "exit_target_mark",
+        "direction": "up",
+        "level": "96000"
+      },
+      "exit_profit_value": {
+        "kind": "own_profit_pct"
+      },
+      "exit_profit": {
+        "kind": "crosses",
+        "input": "exit_profit_value",
+        "direction": "up",
+        "level": "5"
+      },
+      "exit_after": {
+        "kind": "elapsed",
+        "after_secs": 172800
+      }
+    },
+    "actions": {
+      "entry": {
+        "kind": "orders",
+        "on_partial": "keep",
+        "on_stop": "keep_others",
+        "orders": [
+          {
+            "id": "o1",
+            "market": "BTCRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "1000"
+            },
+            "stop": "80000",
+            "take_profit": "96000"
+          }
+        ]
+      },
+      "exit_close": {
+        "kind": "close_own",
+        "markets": "all"
+      }
+    },
+    "start": "waiting",
+    "states": {
+      "waiting": {
+        "on": [
+          {
+            "when": "trigger",
+            "if": [],
+            "do": [
+              "entry"
+            ],
+            "go": "in_trade"
+          }
+        ]
+      },
+      "in_trade": {
+        "on": [
+          {
+            "when": "exit_target",
+            "if": [],
+            "do": [
+              "exit_close"
+            ],
+            "go": "done"
+          },
+          {
+            "when": "exit_profit",
+            "if": [],
+            "do": [
+              "exit_close"
+            ],
+            "go": "done"
+          },
+          {
+            "when": "exit_after",
+            "if": [],
+            "do": [
+              "exit_close"
+            ],
+            "go": "done"
+          }
+        ]
+      },
+      "done": {
+        "on": []
+      }
+    }
+  },
+  "canonical": "{\"actions\":{\"entry\":{\"kind\":\"orders\",\"on_partial\":\"keep\",\"on_stop\":\"keep_others\",\"orders\":[{\"id\":\"o1\",\"market\":\"BTCRUSDPERP\",\"side\":\"buy\",\"size\":{\"usd\":\"1000\"},\"stop\":\"80000\",\"take_profit\":\"96000\"}]},\"exit_close\":{\"kind\":\"close_own\",\"markets\":\"all\"}},\"envelope\":{\"account_id\":\"567\",\"allocation_usd\":\"2000\",\"environment\":\"devnet1\",\"expires_at\":1793504800,\"markets\":[\"BTCRUSDPERP\"],\"max_resting_orders\":20,\"price_bound_bps\":25},\"schema\":\"reya.workflow/2\",\"signals\":{\"exit_after\":{\"after_secs\":172800,\"kind\":\"elapsed\"},\"exit_profit\":{\"direction\":\"up\",\"input\":\"exit_profit_value\",\"kind\":\"crosses\",\"level\":\"5\"},\"exit_profit_value\":{\"kind\":\"own_profit_pct\"},\"exit_target\":{\"direction\":\"up\",\"input\":\"exit_target_mark\",\"kind\":\"crosses\",\"level\":\"96000\"},\"exit_target_mark\":{\"kind\":\"mark\",\"market\":\"BTCRUSDPERP\"},\"trigger\":{\"direction\":\"down\",\"input\":\"trigger_mark\",\"kind\":\"crosses\",\"level\":\"88000\"},\"trigger_mark\":{\"kind\":\"mark\",\"market\":\"BTCRUSDPERP\"}},\"start\":\"waiting\",\"states\":{\"done\":{\"on\":[]},\"in_trade\":{\"on\":[{\"do\":[\"exit_close\"],\"go\":\"done\",\"if\":[],\"when\":\"exit_target\"},{\"do\":[\"exit_close\"],\"go\":\"done\",\"if\":[],\"when\":\"exit_profit\"},{\"do\":[\"exit_close\"],\"go\":\"done\",\"if\":[],\"when\":\"exit_after\"}]},\"waiting\":{\"on\":[{\"do\":[\"entry\"],\"go\":\"in_trade\",\"if\":[],\"when\":\"trigger\"}]}},\"template\":{\"id\":\"basket\",\"version\":1}}",
+  "version_hash": "0xb2ad8937c8354c42c0293f9b65b4c454494f61d23bef6f3c4eeb19a7812e47b2"
+}
