@@ -1,0 +1,110 @@
+{
+  "name": "weekly_dca",
+  "description": "A weekly DCA basket: $50 of BTC and $50 of ETH every Monday at 09:00 UTC.",
+  "request": {
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "params": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "allocation_usd": "400",
+      "expires_at": 1795405600,
+      "trigger": {
+        "kind": "every",
+        "period_secs": 604800,
+        "anchor": 1793005200
+      },
+      "entry": {
+        "orders": [
+          {
+            "type": "immediate",
+            "market": "BTCRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "50"
+            }
+          },
+          {
+            "type": "immediate",
+            "market": "ETHRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "50"
+            }
+          }
+        ]
+      },
+      "repeat": "each"
+    }
+  },
+  "document": {
+    "schema": "reya.workflow/2",
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "envelope": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "markets": [
+        "BTCRUSDPERP",
+        "ETHRUSDPERP"
+      ],
+      "allocation_usd": "400",
+      "expires_at": 1795405600,
+      "price_bound_bps": 25,
+      "max_resting_orders": 20
+    },
+    "signals": {
+      "schedule": {
+        "kind": "every",
+        "period_secs": 604800,
+        "anchor": 1793005200
+      }
+    },
+    "actions": {
+      "entry": {
+        "kind": "orders",
+        "on_partial": "keep",
+        "on_stop": "keep_others",
+        "orders": [
+          {
+            "id": "o1",
+            "market": "BTCRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "50"
+            }
+          },
+          {
+            "id": "o2",
+            "market": "ETHRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "50"
+            }
+          }
+        ]
+      }
+    },
+    "start": "waiting",
+    "states": {
+      "waiting": {
+        "on": [
+          {
+            "when": "schedule",
+            "if": [],
+            "do": [
+              "entry"
+            ],
+            "go": "waiting"
+          }
+        ]
+      }
+    }
+  },
+  "canonical": "{\"actions\":{\"entry\":{\"kind\":\"orders\",\"on_partial\":\"keep\",\"on_stop\":\"keep_others\",\"orders\":[{\"id\":\"o1\",\"market\":\"BTCRUSDPERP\",\"side\":\"buy\",\"size\":{\"usd\":\"50\"}},{\"id\":\"o2\",\"market\":\"ETHRUSDPERP\",\"side\":\"buy\",\"size\":{\"usd\":\"50\"}}]}},\"envelope\":{\"account_id\":\"567\",\"allocation_usd\":\"400\",\"environment\":\"devnet1\",\"expires_at\":1795405600,\"markets\":[\"BTCRUSDPERP\",\"ETHRUSDPERP\"],\"max_resting_orders\":20,\"price_bound_bps\":25},\"schema\":\"reya.workflow/2\",\"signals\":{\"schedule\":{\"anchor\":1793005200,\"kind\":\"every\",\"period_secs\":604800}},\"start\":\"waiting\",\"states\":{\"waiting\":{\"on\":[{\"do\":[\"entry\"],\"go\":\"waiting\",\"if\":[],\"when\":\"schedule\"}]}},\"template\":{\"id\":\"basket\",\"version\":1}}",
+  "version_hash": "0x447f3b0c88e9d0238224c1756a30973bf98b09df6bc226e869d59a1d5e5540cf"
+}
