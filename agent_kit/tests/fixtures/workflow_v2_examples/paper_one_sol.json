@@ -1,0 +1,92 @@
+{
+  "name": "paper_one_sol",
+  "description": "Buy 1 SOL at the start: a one-off order sized in SOL, as a Paper strategy.",
+  "request": {
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "params": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "allocation_usd": "160",
+      "expires_at": 1793504800,
+      "trigger": {
+        "kind": "start"
+      },
+      "entry": {
+        "orders": [
+          {
+            "type": "immediate",
+            "market": "SOLRUSDPERP",
+            "side": "buy",
+            "size": {
+              "qty": "1"
+            }
+          }
+        ]
+      },
+      "repeat": "once"
+    }
+  },
+  "document": {
+    "schema": "reya.workflow/2",
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "envelope": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "markets": [
+        "SOLRUSDPERP"
+      ],
+      "allocation_usd": "160",
+      "expires_at": 1793504800,
+      "price_bound_bps": 25,
+      "max_resting_orders": 20
+    },
+    "signals": {
+      "start": {
+        "kind": "start"
+      }
+    },
+    "actions": {
+      "entry": {
+        "kind": "orders",
+        "on_partial": "keep",
+        "on_stop": "keep_others",
+        "orders": [
+          {
+            "id": "o1",
+            "market": "SOLRUSDPERP",
+            "side": "buy",
+            "size": {
+              "qty": "1"
+            }
+          }
+        ]
+      }
+    },
+    "start": "waiting",
+    "states": {
+      "waiting": {
+        "on": [
+          {
+            "when": "start",
+            "if": [],
+            "do": [
+              "entry"
+            ],
+            "go": "done"
+          }
+        ]
+      },
+      "done": {
+        "on": []
+      }
+    }
+  },
+  "canonical": "{\"actions\":{\"entry\":{\"kind\":\"orders\",\"on_partial\":\"keep\",\"on_stop\":\"keep_others\",\"orders\":[{\"id\":\"o1\",\"market\":\"SOLRUSDPERP\",\"side\":\"buy\",\"size\":{\"qty\":\"1\"}}]}},\"envelope\":{\"account_id\":\"567\",\"allocation_usd\":\"160\",\"environment\":\"devnet1\",\"expires_at\":1793504800,\"markets\":[\"SOLRUSDPERP\"],\"max_resting_orders\":20,\"price_bound_bps\":25},\"schema\":\"reya.workflow/2\",\"signals\":{\"start\":{\"kind\":\"start\"}},\"start\":\"waiting\",\"states\":{\"done\":{\"on\":[]},\"waiting\":{\"on\":[{\"do\":[\"entry\"],\"go\":\"done\",\"if\":[],\"when\":\"start\"}]}},\"template\":{\"id\":\"basket\",\"version\":1}}",
+  "version_hash": "0xdfc141323c2c35c78dc2fd46680d1454e7d1ca4406f659a72fce7efe400eaae1"
+}

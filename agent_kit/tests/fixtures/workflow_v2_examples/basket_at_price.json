@@ -1,0 +1,140 @@
+{
+  "name": "basket_at_price",
+  "description": "The basket example, reading (a): when the ETH mark rises to 3,000, short ETH and buy BTC and SOL together.",
+  "request": {
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "params": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "allocation_usd": "2000",
+      "expires_at": 1793504800,
+      "trigger": {
+        "kind": "price",
+        "market": "ETHRUSDPERP",
+        "direction": "up",
+        "level": "3000"
+      },
+      "entry": {
+        "orders": [
+          {
+            "type": "immediate",
+            "market": "ETHRUSDPERP",
+            "side": "sell",
+            "size": {
+              "usd": "1000"
+            },
+            "stop": "3300"
+          },
+          {
+            "type": "immediate",
+            "market": "BTCRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "500"
+            },
+            "stop": "80000"
+          },
+          {
+            "type": "immediate",
+            "market": "SOLRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "500"
+            }
+          }
+        ]
+      },
+      "repeat": "once"
+    }
+  },
+  "document": {
+    "schema": "reya.workflow/2",
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "envelope": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "markets": [
+        "BTCRUSDPERP",
+        "ETHRUSDPERP",
+        "SOLRUSDPERP"
+      ],
+      "allocation_usd": "2000",
+      "expires_at": 1793504800,
+      "price_bound_bps": 25,
+      "max_resting_orders": 20
+    },
+    "signals": {
+      "trigger_mark": {
+        "kind": "mark",
+        "market": "ETHRUSDPERP"
+      },
+      "trigger": {
+        "kind": "crosses",
+        "input": "trigger_mark",
+        "direction": "up",
+        "level": "3000"
+      }
+    },
+    "actions": {
+      "entry": {
+        "kind": "orders",
+        "on_partial": "keep",
+        "on_stop": "close_all",
+        "orders": [
+          {
+            "id": "o1",
+            "market": "ETHRUSDPERP",
+            "side": "sell",
+            "size": {
+              "usd": "1000"
+            },
+            "stop": "3300"
+          },
+          {
+            "id": "o2",
+            "market": "BTCRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "500"
+            },
+            "stop": "80000"
+          },
+          {
+            "id": "o3",
+            "market": "SOLRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "500"
+            }
+          }
+        ]
+      }
+    },
+    "start": "waiting",
+    "states": {
+      "waiting": {
+        "on": [
+          {
+            "when": "trigger",
+            "if": [],
+            "do": [
+              "entry"
+            ],
+            "go": "done"
+          }
+        ]
+      },
+      "done": {
+        "on": []
+      }
+    }
+  },
+  "canonical": "{\"actions\":{\"entry\":{\"kind\":\"orders\",\"on_partial\":\"keep\",\"on_stop\":\"close_all\",\"orders\":[{\"id\":\"o1\",\"market\":\"ETHRUSDPERP\",\"side\":\"sell\",\"size\":{\"usd\":\"1000\"},\"stop\":\"3300\"},{\"id\":\"o2\",\"market\":\"BTCRUSDPERP\",\"side\":\"buy\",\"size\":{\"usd\":\"500\"},\"stop\":\"80000\"},{\"id\":\"o3\",\"market\":\"SOLRUSDPERP\",\"side\":\"buy\",\"size\":{\"usd\":\"500\"}}]}},\"envelope\":{\"account_id\":\"567\",\"allocation_usd\":\"2000\",\"environment\":\"devnet1\",\"expires_at\":1793504800,\"markets\":[\"BTCRUSDPERP\",\"ETHRUSDPERP\",\"SOLRUSDPERP\"],\"max_resting_orders\":20,\"price_bound_bps\":25},\"schema\":\"reya.workflow/2\",\"signals\":{\"trigger\":{\"direction\":\"up\",\"input\":\"trigger_mark\",\"kind\":\"crosses\",\"level\":\"3000\"},\"trigger_mark\":{\"kind\":\"mark\",\"market\":\"ETHRUSDPERP\"}},\"start\":\"waiting\",\"states\":{\"done\":{\"on\":[]},\"waiting\":{\"on\":[{\"do\":[\"entry\"],\"go\":\"done\",\"if\":[],\"when\":\"trigger\"}]}},\"template\":{\"id\":\"basket\",\"version\":1}}",
+  "version_hash": "0x64d5bbfa5b51622b395e52d2282eb153e35875a6ee919b17da0ab603df86ddcb"
+}
