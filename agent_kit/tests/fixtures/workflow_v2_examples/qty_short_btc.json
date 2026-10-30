@@ -1,0 +1,121 @@
+{
+  "name": "qty_short_btc",
+  "description": "When the BTC mark rises to 95,000, short 0.05 BTC with a stop at 98,000 and buy $500 of ETH.",
+  "request": {
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "params": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "allocation_usd": "5500",
+      "expires_at": 1793504800,
+      "trigger": {
+        "kind": "price",
+        "market": "BTCRUSDPERP",
+        "direction": "up",
+        "level": "95000"
+      },
+      "entry": {
+        "orders": [
+          {
+            "type": "immediate",
+            "market": "BTCRUSDPERP",
+            "side": "sell",
+            "size": {
+              "qty": "0.05"
+            },
+            "stop": "98000"
+          },
+          {
+            "type": "immediate",
+            "market": "ETHRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "500"
+            }
+          }
+        ]
+      },
+      "repeat": "once"
+    }
+  },
+  "document": {
+    "schema": "reya.workflow/2",
+    "template": {
+      "id": "basket",
+      "version": 1
+    },
+    "envelope": {
+      "environment": "devnet1",
+      "account_id": "567",
+      "markets": [
+        "BTCRUSDPERP",
+        "ETHRUSDPERP"
+      ],
+      "allocation_usd": "5500",
+      "expires_at": 1793504800,
+      "price_bound_bps": 25,
+      "max_resting_orders": 20
+    },
+    "signals": {
+      "trigger_mark": {
+        "kind": "mark",
+        "market": "BTCRUSDPERP"
+      },
+      "trigger": {
+        "kind": "crosses",
+        "input": "trigger_mark",
+        "direction": "up",
+        "level": "95000"
+      }
+    },
+    "actions": {
+      "entry": {
+        "kind": "orders",
+        "on_partial": "keep",
+        "on_stop": "close_all",
+        "orders": [
+          {
+            "id": "o1",
+            "market": "BTCRUSDPERP",
+            "side": "sell",
+            "size": {
+              "qty": "0.05"
+            },
+            "stop": "98000"
+          },
+          {
+            "id": "o2",
+            "market": "ETHRUSDPERP",
+            "side": "buy",
+            "size": {
+              "usd": "500"
+            }
+          }
+        ]
+      }
+    },
+    "start": "waiting",
+    "states": {
+      "waiting": {
+        "on": [
+          {
+            "when": "trigger",
+            "if": [],
+            "do": [
+              "entry"
+            ],
+            "go": "done"
+          }
+        ]
+      },
+      "done": {
+        "on": []
+      }
+    }
+  },
+  "canonical": "{\"actions\":{\"entry\":{\"kind\":\"orders\",\"on_partial\":\"keep\",\"on_stop\":\"close_all\",\"orders\":[{\"id\":\"o1\",\"market\":\"BTCRUSDPERP\",\"side\":\"sell\",\"size\":{\"qty\":\"0.05\"},\"stop\":\"98000\"},{\"id\":\"o2\",\"market\":\"ETHRUSDPERP\",\"side\":\"buy\",\"size\":{\"usd\":\"500\"}}]}},\"envelope\":{\"account_id\":\"567\",\"allocation_usd\":\"5500\",\"environment\":\"devnet1\",\"expires_at\":1793504800,\"markets\":[\"BTCRUSDPERP\",\"ETHRUSDPERP\"],\"max_resting_orders\":20,\"price_bound_bps\":25},\"schema\":\"reya.workflow/2\",\"signals\":{\"trigger\":{\"direction\":\"up\",\"input\":\"trigger_mark\",\"kind\":\"crosses\",\"level\":\"95000\"},\"trigger_mark\":{\"kind\":\"mark\",\"market\":\"BTCRUSDPERP\"}},\"start\":\"waiting\",\"states\":{\"done\":{\"on\":[]},\"waiting\":{\"on\":[{\"do\":[\"entry\"],\"go\":\"done\",\"if\":[],\"when\":\"trigger\"}]}},\"template\":{\"id\":\"basket\",\"version\":1}}",
+  "version_hash": "0x98f9d1155130b6c7a37f938c19b905e07c52744616556cae592e6a5e31a732e9"
+}
