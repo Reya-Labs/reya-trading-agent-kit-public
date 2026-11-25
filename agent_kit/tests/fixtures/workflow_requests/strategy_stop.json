@@ -1,0 +1,550 @@
+{
+  "description": "StrategyStop requests, the body of POST /v1/runs/{run_id}/stop: EIP-712 hashes, signatures and the service's verdict on the checks that need no state. See README.md.",
+  "domain": {
+    "name": "Reya Workflows",
+    "version": "1"
+  },
+  "domain_separator": "0xfb5e35bedf3c94b21514b955cb1ae000874eadcc5814d966fd2f252d395f1a09",
+  "primary_type": "StrategyStop",
+  "types": {
+    "StrategyStop": [
+      {
+        "name": "verifyingChainId",
+        "type": "uint256"
+      },
+      {
+        "name": "environment",
+        "type": "string"
+      },
+      {
+        "name": "accountId",
+        "type": "uint64"
+      },
+      {
+        "name": "strategyId",
+        "type": "uint64"
+      },
+      {
+        "name": "runId",
+        "type": "uint64"
+      },
+      {
+        "name": "keepPosition",
+        "type": "bool"
+      },
+      {
+        "name": "signer",
+        "type": "address"
+      },
+      {
+        "name": "nonce",
+        "type": "uint64"
+      },
+      {
+        "name": "deadline",
+        "type": "uint64"
+      }
+    ]
+  },
+  "encode_type": "StrategyStop(uint256 verifyingChainId,string environment,uint64 accountId,uint64 strategyId,uint64 runId,bool keepPosition,address signer,uint64 nonce,uint64 deadline)",
+  "type_hash": "0xfd5a271a647ed38664e41b360dfec0dd8c428c03408f12743d688215fa8ab67c",
+  "keys": {
+    "owner": {
+      "private_key": "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d",
+      "address": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    "agent": {
+      "private_key": "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a",
+      "address": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+    },
+    "hosted": {
+      "private_key": "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6",
+      "address": "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+    },
+    "stranger": {
+      "private_key": "0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a",
+      "address": "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65"
+    }
+  },
+  "cases": [
+    {
+      "name": "the owner stops and closes",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "3000042",
+      "signed_by": "owner",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "strategyId": "12",
+          "runId": "3000042",
+          "keepPosition": false,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1",
+          "deadline": "1792368120"
+        },
+        "signature": "0x350d8a6471caa6256fd9fc9a74028b20edc35e8c02a13f43a8ffaf394371d62e45c5fad7a79c270f0f5d2b34fb5dc473ed668613ae351761da2a3b5384e759601b"
+      },
+      "struct_hash": "0x14f0cda182d8fa7492bc0d469bf9ebc0d0f215ab4236df03c6821eec83912cd2",
+      "digest": "0x03c0f7ae171416d02712e946f54f6d579eddf163f4ee3b3eff8a113425922f9c",
+      "expect": {
+        "ok": true,
+        "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+      }
+    },
+    {
+      "name": "the owner stops and keeps its positions",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "3000042",
+      "signed_by": "owner",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "strategyId": "12",
+          "runId": "3000042",
+          "keepPosition": true,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "2",
+          "deadline": "1792368120"
+        },
+        "signature": "0x835ce8c35d05798a054b89cbcbe061b15478921d9ce3df5a5ca133ddc72d545e29ccc85f4082153829cef9cf3eedb23c5f056fc10791448b40d0d8610d7d41e31c"
+      },
+      "struct_hash": "0xf177b02c95c1bb3f0f8159a911042744522ae28ff865adab8a8f270f6170f7fe",
+      "digest": "0xef914925437ff51e7a00ca1eee77e74aac11b667206f474ffeb5bed7971e46eb",
+      "expect": {
+        "ok": true,
+        "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+      }
+    },
+    {
+      "name": "an approved delegate stops",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "3000042",
+      "signed_by": "agent",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "strategyId": "12",
+          "runId": "3000042",
+          "keepPosition": false,
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          "nonce": "1",
+          "deadline": "1792368120"
+        },
+        "signature": "0x9921192b057f5ca8bad666b41acaccfb7c6885a976c5b077ce959526f1825f9f719ff640e2020d08770fc52e2e1fbd6dc7ec015eedf122ee5670e0cb5d1c0ced1b"
+      },
+      "struct_hash": "0xdf7b61c615664d92f7e9dca4d5dd4cf0bd6182d0f16c0405af8449172d50318c",
+      "digest": "0x1e07152a748d767e69c7dde6325a99ff8614144a04ae8fbc4377eb888a1653e8",
+      "expect": {
+        "ok": true,
+        "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      }
+    },
+    {
+      "name": "a deadline exactly 600 seconds ahead",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "3000042",
+      "signed_by": "owner",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "strategyId": "12",
+          "runId": "3000042",
+          "keepPosition": false,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1",
+          "deadline": "1792368600"
+        },
+        "signature": "0x554217d4d96ddd76dade76ac6a997c8b34f8143798aaf5d95d2f13b817e69b326d5a9de117d64791825e82caafdabae07703c5a8728c46eb0556afd1d1ebe1b41c"
+      },
+      "struct_hash": "0x33db5aca4696923f92f62b194ea72a02d7d342b3a6c5e3c423ee15c06f0e6cc8",
+      "digest": "0x5ccf803c9b2f12ba17e16fe9e474aff8574179a7183ef6c6e26e761ccf04c58f",
+      "expect": {
+        "ok": true,
+        "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+      }
+    },
+    {
+      "name": "the path names another run",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "3000043",
+      "signed_by": "owner",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "strategyId": "12",
+          "runId": "3000042",
+          "keepPosition": false,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1",
+          "deadline": "1792368120"
+        },
+        "signature": "0x350d8a6471caa6256fd9fc9a74028b20edc35e8c02a13f43a8ffaf394371d62e45c5fad7a79c270f0f5d2b34fb5dc473ed668613ae351761da2a3b5384e759601b"
+      },
+      "struct_hash": "0x14f0cda182d8fa7492bc0d469bf9ebc0d0f215ab4236df03c6821eec83912cd2",
+      "digest": "0x03c0f7ae171416d02712e946f54f6d579eddf163f4ee3b3eff8a113425922f9c",
+      "expect": {
+        "error": "INVALID_REQUEST"
+      }
+    },
+    {
+      "name": "signed for another run than the path's",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "3000042",
+      "signed_by": "owner",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "strategyId": "12",
+          "runId": "3000043",
+          "keepPosition": false,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1",
+          "deadline": "1792368120"
+        },
+        "signature": "0x464783122f5536ffb6baa5b8f42b6b430c87b30971298c30dcbe363cef436cb20e275521d853c998e270452e7109cf2e64e193d687fca50e48b674cf95444f941c"
+      },
+      "struct_hash": "0x06811e4e9e1baa50702e7c7ac6fb6ae39ba509402f46cc40b0adbad00221db38",
+      "digest": "0x41400b739e3344edf4e2903874878f61298663a510fb5ee40b38278f2123a1c1",
+      "expect": {
+        "error": "INVALID_REQUEST"
+      }
+    },
+    {
+      "name": "a run of the previous version",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "42",
+      "signed_by": "owner",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "strategyId": "12",
+          "runId": "42",
+          "keepPosition": false,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1",
+          "deadline": "1792368120"
+        },
+        "signature": "0xa07742b1baa357d9a6892d75574d0a7bf20f600434ca6a2e4397e8b2f3c2fcb75d5f3902bb50d5b4d5ec5b8471f8c420f096ee5cdeafa1dfe8555e508d5f0e311c"
+      },
+      "struct_hash": "0xa654891a3a8f341d3c3a82a288d84952078208327b99c6a8297e15a18e9a1ff0",
+      "digest": "0x906636881873a52cdf3cf546981c325ba7082a4260b7b06c7e9fcd9af2e94265",
+      "expect": {
+        "error": "RUN_ON_PREVIOUS_VERSION"
+      }
+    },
+    {
+      "name": "mainnet named on a devnet1 service",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "3000042",
+      "signed_by": "owner",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "mainnet",
+          "accountId": "123456",
+          "strategyId": "12",
+          "runId": "3000042",
+          "keepPosition": false,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1",
+          "deadline": "1792368120"
+        },
+        "signature": "0x5ce655ae5e4337e595ba6e6ceb753ebf5bbd6f845207b575a09d3aee83be7f6c2696c68d876f74f5c72a745b7fb61e0f05358c1de4ac189c7feda6097ab623b61b"
+      },
+      "struct_hash": "0x81b5e0ea6c47cee681573494816b0561e4f2a8ab7d177ea4855cce0da0bd76ce",
+      "digest": "0xe62589700a46f5606f47402c573065809e99aee60eb841dadf4cc8fafa67fbb1",
+      "expect": {
+        "error": "WRONG_ENVIRONMENT"
+      }
+    },
+    {
+      "name": "the mainnet chain named on a devnet1 service",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "3000042",
+      "signed_by": "owner",
+      "body": {
+        "request": {
+          "verifyingChainId": "1729",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "strategyId": "12",
+          "runId": "3000042",
+          "keepPosition": false,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1",
+          "deadline": "1792368120"
+        },
+        "signature": "0xf272800b7d33c1658d9d66bb40bfe848da5555fb5df7ecdb1a597acc01a6779f53fbe883e8ebc08bc0886ff4477bf29fe3923861991423460f29c682ecd1fd031b"
+      },
+      "struct_hash": "0x9d6eb9d68b6befc7af4b6104d4fb4fa153ca3bb6d73814c577a79e6e103de742",
+      "digest": "0x09ae2097e44ba8716de239260e248cc77669e5029c39a6956f613b7bca421e22",
+      "expect": {
+        "error": "WRONG_ENVIRONMENT"
+      }
+    },
+    {
+      "name": "a deadline now",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "3000042",
+      "signed_by": "owner",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "strategyId": "12",
+          "runId": "3000042",
+          "keepPosition": false,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1",
+          "deadline": "1792368000"
+        },
+        "signature": "0x9cd8238c3a7114541e99aca0036c40578f9199288c15e8aa9e0739662063076f08e73d769ffea9e424f15d9eea6f86e78c194b58cbe2716c575b19ae076e74181b"
+      },
+      "struct_hash": "0x23b827424d8a979cbf34ac5c499f948f02a52436979340ea172ebeb6123a84ac",
+      "digest": "0x5c2bf31fb52510427e0d99ec266e004d8c211d8164f567e185ff4805c311f6d6",
+      "expect": {
+        "error": "REQUEST_EXPIRED"
+      }
+    },
+    {
+      "name": "a deadline 601 seconds ahead",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "3000042",
+      "signed_by": "owner",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "strategyId": "12",
+          "runId": "3000042",
+          "keepPosition": false,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1",
+          "deadline": "1792368601"
+        },
+        "signature": "0x14b3d7e6c64a972c1bcc277e9bd3e558b83a4e9c6349fb4bbc406d2db9d87ffe4efa6e979491ecce25512139b8530f3a9e31e5dbf537c20873769aafc384820d1c"
+      },
+      "struct_hash": "0xf407534c2ed8933c9221dbc1c8a0485ebc3985653dff4237abd17f78e990dd25",
+      "digest": "0x6c79ffd64f1358e6f74717f5a0b4aa22f9ccc81fcecd29deefc076c149f52f14",
+      "expect": {
+        "error": "DEADLINE_TOO_FAR"
+      }
+    },
+    {
+      "name": "no strategy named",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "3000042",
+      "signed_by": "owner",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "strategyId": "0",
+          "runId": "3000042",
+          "keepPosition": false,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1",
+          "deadline": "1792368120"
+        },
+        "signature": "0x1523c262fed4b6292715821bbc56cba4c3576549a527906283267050543f05aa2f9bcced97f30915eaf4eb8c4e9d3ccc91b82c2ef6be19bbc3e46e7d80bf16071b"
+      },
+      "struct_hash": "0x4be06136ac9862c017ae0a800cfc510f4872db61bfdc12c2c30cb850da67d192",
+      "digest": "0x05c911c06c9e875489d28e4db7918b3064d787450127ccae785490aa8a5cde41",
+      "expect": {
+        "error": "INVALID_REQUEST"
+      }
+    },
+    {
+      "name": "signed by another key than the named signer",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "3000042",
+      "signed_by": "stranger",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "strategyId": "12",
+          "runId": "3000042",
+          "keepPosition": false,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1",
+          "deadline": "1792368120"
+        },
+        "signature": "0xb475500af6a3b0bf9c016c9a63163ebc91d71ff4b9adc16709e04c8c62365aa473d8ec55e549ca4db04ad2ec19dd60243251ae97b142b50e1f9b564de5102b3e1b"
+      },
+      "struct_hash": "0x14f0cda182d8fa7492bc0d469bf9ebc0d0f215ab4236df03c6821eec83912cd2",
+      "digest": "0x03c0f7ae171416d02712e946f54f6d579eddf163f4ee3b3eff8a113425922f9c",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "signed under the order domain",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "3000042",
+      "signed_by": "owner",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "strategyId": "12",
+          "runId": "3000042",
+          "keepPosition": false,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1",
+          "deadline": "1792368120"
+        },
+        "signature": "0x95e95a1f1630a1bbcfe6c301a31627908e160a8dee4967924496d9f4017a90e46ad65fd944532b24097c1812f99ec9132ec9d8560992b98c65d503d2e3992e691b"
+      },
+      "struct_hash": "0x14f0cda182d8fa7492bc0d469bf9ebc0d0f215ab4236df03c6821eec83912cd2",
+      "digest": "0x03c0f7ae171416d02712e946f54f6d579eddf163f4ee3b3eff8a113425922f9c",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "keepPosition changed after signing",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "3000042",
+      "signed_by": "owner",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "strategyId": "12",
+          "runId": "3000042",
+          "keepPosition": true,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "2",
+          "deadline": "1792368120"
+        },
+        "signature": "0x350d8a6471caa6256fd9fc9a74028b20edc35e8c02a13f43a8ffaf394371d62e45c5fad7a79c270f0f5d2b34fb5dc473ed668613ae351761da2a3b5384e759601b"
+      },
+      "struct_hash": "0xf177b02c95c1bb3f0f8159a911042744522ae28ff865adab8a8f270f6170f7fe",
+      "digest": "0xef914925437ff51e7a00ca1eee77e74aac11b667206f474ffeb5bed7971e46eb",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "a high s",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "3000042",
+      "signed_by": "owner",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "strategyId": "12",
+          "runId": "3000042",
+          "keepPosition": false,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1",
+          "deadline": "1792368120"
+        },
+        "signature": "0x350d8a6471caa6256fd9fc9a74028b20edc35e8c02a13f43a8ffaf394371d62eba3a05285863d8f0f0a2d4cb04a23b8acd4856d3011388d9e5a823394b4ee7e11c"
+      },
+      "struct_hash": "0x14f0cda182d8fa7492bc0d469bf9ebc0d0f215ab4236df03c6821eec83912cd2",
+      "digest": "0x03c0f7ae171416d02712e946f54f6d579eddf163f4ee3b3eff8a113425922f9c",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "a 64-byte signature",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "path_run_id": "3000042",
+      "body": {
+        "request": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "accountId": "123456",
+          "strategyId": "12",
+          "runId": "3000042",
+          "keepPosition": false,
+          "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "nonce": "1",
+          "deadline": "1792368120"
+        },
+        "signature": "0x350d8a6471caa6256fd9fc9a74028b20edc35e8c02a13f43a8ffaf394371d62e45c5fad7a79c270f0f5d2b34fb5dc473ed668613ae351761da2a3b5384e75960"
+      },
+      "struct_hash": "0x14f0cda182d8fa7492bc0d469bf9ebc0d0f215ab4236df03c6821eec83912cd2",
+      "digest": "0x03c0f7ae171416d02712e946f54f6d579eddf163f4ee3b3eff8a113425922f9c",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    }
+  ]
+}
