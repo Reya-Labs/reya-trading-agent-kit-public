@@ -1,0 +1,262 @@
+{
+  "description": "StrategyStart bodies of POST /v1/runs: EIP-712 hashes, signatures and the service's verdict on the checks that need no state. See README.md.",
+  "domain": {
+    "name": "Reya Workflows",
+    "version": "1"
+  },
+  "domain_separator": "0xfb5e35bedf3c94b21514b955cb1ae000874eadcc5814d966fd2f252d395f1a09",
+  "primary_type": "StrategyStart",
+  "types": {
+    "StrategyStart": [
+      {
+        "name": "verifyingChainId",
+        "type": "uint256"
+      },
+      {
+        "name": "environment",
+        "type": "string"
+      },
+      {
+        "name": "accountId",
+        "type": "uint64"
+      },
+      {
+        "name": "versionHash",
+        "type": "bytes32"
+      },
+      {
+        "name": "expiresAt",
+        "type": "uint64"
+      },
+      {
+        "name": "mode",
+        "type": "string"
+      },
+      {
+        "name": "fireNow",
+        "type": "bool"
+      },
+      {
+        "name": "previewId",
+        "type": "uint64"
+      },
+      {
+        "name": "handoverStops",
+        "type": "HandoverStop[]"
+      },
+      {
+        "name": "signer",
+        "type": "address"
+      },
+      {
+        "name": "nonce",
+        "type": "uint64"
+      },
+      {
+        "name": "deadline",
+        "type": "uint64"
+      }
+    ],
+    "HandoverStop": [
+      {
+        "name": "market",
+        "type": "string"
+      },
+      {
+        "name": "orderId",
+        "type": "uint64"
+      },
+      {
+        "name": "kind",
+        "type": "string"
+      },
+      {
+        "name": "isBuy",
+        "type": "bool"
+      },
+      {
+        "name": "triggerPrice",
+        "type": "uint256"
+      },
+      {
+        "name": "limitPrice",
+        "type": "uint256"
+      },
+      {
+        "name": "reduceOnly",
+        "type": "bool"
+      }
+    ]
+  },
+  "encode_type": "StrategyStart(uint256 verifyingChainId,string environment,uint64 accountId,bytes32 versionHash,uint64 expiresAt,string mode,bool fireNow,uint64 previewId,HandoverStop[] handoverStops,address signer,uint64 nonce,uint64 deadline)HandoverStop(string market,uint64 orderId,string kind,bool isBuy,uint256 triggerPrice,uint256 limitPrice,bool reduceOnly)",
+  "type_hash": "0xa94bc7d0e2d1a5f65ef63709afa0b51409886335c358c1dd78036581f8e3a357",
+  "keys": {
+    "owner": {
+      "private_key": "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d",
+      "address": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    "agent": {
+      "private_key": "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a",
+      "address": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+    },
+    "hosted": {
+      "private_key": "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6",
+      "address": "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+    },
+    "stranger": {
+      "private_key": "0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a",
+      "address": "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65"
+    }
+  },
+  "cases": [
+    {
+      "name": "a Paper Start signed by the agent key",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "struct_hash": "0x407fd7e5df79824107e5598629ca959285d6336e78f15a76ed896eb63dbe41bc",
+      "digest": "0xd684224a70afeb5492e9eeafff83589521931864b2fc4741304c78a74064bd7a",
+      "body": "{\"document\":\"{\\\"schema\\\":\\\"reya.workflow/3\\\"}\",\"request\":{\"verifyingChainId\":\"89346162\",\"environment\":\"devnet1\",\"accountId\":\"1001\",\"versionHash\":\"0xabababababababababababababababababababababababababababababababab\",\"expiresAt\":\"1792371600\",\"mode\":\"paper\",\"fireNow\":true,\"previewId\":\"17\",\"handoverStops\":[],\"signer\":\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\",\"nonce\":\"1792368000000000\",\"deadline\":\"1792368300\"},\"signature\":\"0x8c80a0d4701822634975bc6b4a07432f6ff9039195eefe103d8b9f8c57b6030c6f1a5634f5f394e84cc3a77df7fe909f4fca701ed58d5f62a08ef5e63a4ec4ac1b\"}",
+      "expect": {
+        "ok": true,
+        "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      }
+    },
+    {
+      "name": "a Live Start signed by the owner",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "owner",
+      "struct_hash": "0xf631aa788b53aba29c4f0878ca0fb8f6d6d3ffb131b07d09f97933031e17a0e0",
+      "digest": "0x8c4deb36a924ea95273e8a08ddd3bab6a37948919b4d97f95825057deacd9cb3",
+      "body": "{\"document\":\"{\\\"schema\\\":\\\"reya.workflow/3\\\"}\",\"request\":{\"verifyingChainId\":\"89346162\",\"environment\":\"devnet1\",\"accountId\":\"1001\",\"versionHash\":\"0xabababababababababababababababababababababababababababababababab\",\"expiresAt\":\"1792371600\",\"mode\":\"live\",\"fireNow\":false,\"previewId\":\"18\",\"handoverStops\":[],\"signer\":\"0x70997970C51812dc3A010C7d01b50e0d17dc79C8\",\"nonce\":\"1792368000000000\",\"deadline\":\"1792368300\"},\"signature\":\"0xed42254ac4c29e8decb47cc411e029032c7f696f388a1c0c6e81e918fc1fb3a52efa2967a2e526d65f96dccdbe912bbc9bbcb3f510e4965b90afaafacade35711b\"}",
+      "expect": {
+        "ok": true,
+        "signer": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+      }
+    },
+    {
+      "name": "v as 0 or 1 reads as 27 or 28",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "struct_hash": "0x407fd7e5df79824107e5598629ca959285d6336e78f15a76ed896eb63dbe41bc",
+      "digest": "0xd684224a70afeb5492e9eeafff83589521931864b2fc4741304c78a74064bd7a",
+      "body": "{\"document\":\"{\\\"schema\\\":\\\"reya.workflow/3\\\"}\",\"request\":{\"verifyingChainId\":\"89346162\",\"environment\":\"devnet1\",\"accountId\":\"1001\",\"versionHash\":\"0xabababababababababababababababababababababababababababababababab\",\"expiresAt\":\"1792371600\",\"mode\":\"paper\",\"fireNow\":true,\"previewId\":\"17\",\"handoverStops\":[],\"signer\":\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\",\"nonce\":\"1792368000000000\",\"deadline\":\"1792368300\"},\"signature\":\"0x8c80a0d4701822634975bc6b4a07432f6ff9039195eefe103d8b9f8c57b6030c6f1a5634f5f394e84cc3a77df7fe909f4fca701ed58d5f62a08ef5e63a4ec4ac00\"}",
+      "expect": {
+        "ok": true,
+        "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      }
+    },
+    {
+      "name": "the mode changed after signing",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "struct_hash": "0x01f0dfb60ceab87c05b7791d3f5081835768d0c5b4e6681286129502fbf7b2a6",
+      "digest": "0xe95207c416dd887124621fa9f203f81686ed0cf5e4e31bddcd3a21269fd780f2",
+      "body": "{\"document\":\"{\\\"schema\\\":\\\"reya.workflow/3\\\"}\",\"request\":{\"verifyingChainId\":\"89346162\",\"environment\":\"devnet1\",\"accountId\":\"1001\",\"versionHash\":\"0xabababababababababababababababababababababababababababababababab\",\"expiresAt\":\"1792371600\",\"mode\":\"live\",\"fireNow\":true,\"previewId\":\"17\",\"handoverStops\":[],\"signer\":\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\",\"nonce\":\"1792368000000000\",\"deadline\":\"1792368300\"},\"signature\":\"0x8c80a0d4701822634975bc6b4a07432f6ff9039195eefe103d8b9f8c57b6030c6f1a5634f5f394e84cc3a77df7fe909f4fca701ed58d5f62a08ef5e63a4ec4ac1b\"}",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "the previewId changed after signing",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "struct_hash": "0x03450ebf00e98c9d3a950e4b60118e39ec22ff4970fe3ce84d4d6e0e702d4484",
+      "digest": "0x70adba0559d891226f422a428660790ca42d68e64d53684d28dccc1f8d7c4f3b",
+      "body": "{\"document\":\"{\\\"schema\\\":\\\"reya.workflow/3\\\"}\",\"request\":{\"verifyingChainId\":\"89346162\",\"environment\":\"devnet1\",\"accountId\":\"1001\",\"versionHash\":\"0xabababababababababababababababababababababababababababababababab\",\"expiresAt\":\"1792371600\",\"mode\":\"paper\",\"fireNow\":true,\"previewId\":\"18\",\"handoverStops\":[],\"signer\":\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\",\"nonce\":\"1792368000000000\",\"deadline\":\"1792368300\"},\"signature\":\"0x8c80a0d4701822634975bc6b4a07432f6ff9039195eefe103d8b9f8c57b6030c6f1a5634f5f394e84cc3a77df7fe909f4fca701ed58d5f62a08ef5e63a4ec4ac1b\"}",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "the agent's message signed by a stranger",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "stranger",
+      "struct_hash": "0x407fd7e5df79824107e5598629ca959285d6336e78f15a76ed896eb63dbe41bc",
+      "digest": "0xd684224a70afeb5492e9eeafff83589521931864b2fc4741304c78a74064bd7a",
+      "body": "{\"document\":\"{\\\"schema\\\":\\\"reya.workflow/3\\\"}\",\"request\":{\"verifyingChainId\":\"89346162\",\"environment\":\"devnet1\",\"accountId\":\"1001\",\"versionHash\":\"0xabababababababababababababababababababababababababababababababab\",\"expiresAt\":\"1792371600\",\"mode\":\"paper\",\"fireNow\":true,\"previewId\":\"17\",\"handoverStops\":[],\"signer\":\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\",\"nonce\":\"1792368000000000\",\"deadline\":\"1792368300\"},\"signature\":\"0xa43469bf8b9fc1fd4ae80ab3ba129107db273f9d87b63bb2691bbf6c6b1cbb1b025953d0cf6a8affda1c319147117993e4948d9dd4521e6da9a0a1ecceb20fa01b\"}",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "a high s",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "struct_hash": "0x407fd7e5df79824107e5598629ca959285d6336e78f15a76ed896eb63dbe41bc",
+      "digest": "0xd684224a70afeb5492e9eeafff83589521931864b2fc4741304c78a74064bd7a",
+      "body": "{\"document\":\"{\\\"schema\\\":\\\"reya.workflow/3\\\"}\",\"request\":{\"verifyingChainId\":\"89346162\",\"environment\":\"devnet1\",\"accountId\":\"1001\",\"versionHash\":\"0xabababababababababababababababababababababababababababababababab\",\"expiresAt\":\"1792371600\",\"mode\":\"paper\",\"fireNow\":true,\"previewId\":\"17\",\"handoverStops\":[],\"signer\":\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\",\"nonce\":\"1792368000000000\",\"deadline\":\"1792368300\"},\"signature\":\"0x8c80a0d4701822634975bc6b4a07432f6ff9039195eefe103d8b9f8c57b6030c90e5a9cb0a0c6b17b33c588208016f5f6ae46cc7d9bb40d91f4368a695e77c951c\"}",
+      "expect": {
+        "error": "BAD_SIGNATURE"
+      }
+    },
+    {
+      "name": "a duplicate mode, the second unsigned",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "body": "{\"document\":\"{\\\"schema\\\":\\\"reya.workflow/3\\\"}\",\"request\":{\"verifyingChainId\":\"89346162\",\"environment\":\"devnet1\",\"accountId\":\"1001\",\"versionHash\":\"0xabababababababababababababababababababababababababababababababab\",\"expiresAt\":\"1792371600\",\"mode\":\"paper\",\"mode\":\"live\",\"fireNow\":true,\"previewId\":\"17\",\"handoverStops\":[],\"signer\":\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\",\"nonce\":\"1792368000000000\",\"deadline\":\"1792368300\"},\"signature\":\"0x8c80a0d4701822634975bc6b4a07432f6ff9039195eefe103d8b9f8c57b6030c6f1a5634f5f394e84cc3a77df7fe909f4fca701ed58d5f62a08ef5e63a4ec4ac1b\"}",
+      "expect": {
+        "error": "INVALID_REQUEST"
+      }
+    },
+    {
+      "name": "a nonce with a leading zero",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "struct_hash": "0x734bc63c2775196e962f34cc5194fcb614189f576a52b92f48a82b458ff18161",
+      "digest": "0x5ff46fe038782e7755128de2456799853e725b9dfb039d37b8aed1c3bc23533e",
+      "body": "{\"document\":\"{\\\"schema\\\":\\\"reya.workflow/3\\\"}\",\"request\":{\"verifyingChainId\":\"89346162\",\"environment\":\"devnet1\",\"accountId\":\"1001\",\"versionHash\":\"0xabababababababababababababababababababababababababababababababab\",\"expiresAt\":\"1792371600\",\"mode\":\"paper\",\"fireNow\":true,\"previewId\":\"17\",\"handoverStops\":[],\"signer\":\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\",\"nonce\":\"01\",\"deadline\":\"1792368300\"},\"signature\":\"0x8c80a0d4701822634975bc6b4a07432f6ff9039195eefe103d8b9f8c57b6030c6f1a5634f5f394e84cc3a77df7fe909f4fca701ed58d5f62a08ef5e63a4ec4ac1b\"}",
+      "expect": {
+        "error": "INVALID_REQUEST",
+        "field": "nonce"
+      }
+    },
+    {
+      "name": "an unsigned label beside the request",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "body": "{\"document\":\"{\\\"schema\\\":\\\"reya.workflow/3\\\"}\",\"request\":{\"verifyingChainId\":\"89346162\",\"environment\":\"devnet1\",\"accountId\":\"1001\",\"versionHash\":\"0xabababababababababababababababababababababababababababababababab\",\"expiresAt\":\"1792371600\",\"mode\":\"paper\",\"fireNow\":true,\"previewId\":\"17\",\"handoverStops\":[],\"signer\":\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\",\"nonce\":\"1792368000000000\",\"deadline\":\"1792368300\"},\"signature\":\"0x8c80a0d4701822634975bc6b4a07432f6ff9039195eefe103d8b9f8c57b6030c6f1a5634f5f394e84cc3a77df7fe909f4fca701ed58d5f62a08ef5e63a4ec4ac1b\",\"note\":\"x\"}",
+      "expect": {
+        "error": "INVALID_REQUEST"
+      }
+    },
+    {
+      "name": "a Start of the previous version",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "body": "{\"document\":\"{\\\"schema\\\":\\\"reya.workflow/3\\\"}\",\"label\":\"old\",\"signature\":\"0x8c80a0d4701822634975bc6b4a07432f6ff9039195eefe103d8b9f8c57b6030c6f1a5634f5f394e84cc3a77df7fe909f4fca701ed58d5f62a08ef5e63a4ec4ac1b\",\"request\":{\"verifyingChainId\":\"89346162\",\"environment\":\"devnet1\",\"accountId\":\"1001\",\"versionHash\":\"0xabababababababababababababababababababababababababababababababab\",\"expiresAt\":\"1792371600\",\"mode\":\"paper\",\"fireNow\":true,\"previewId\":\"17\",\"handoverStops\":[],\"signer\":\"0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC\",\"nonce\":\"1792368000000000\",\"deadline\":\"1792368300\",\"allocationUsd\":\"100\",\"hostedSigner\":\"0x90F79bf6EB2c4f870365E785982E1f101E93b906\"}}",
+      "expect": {
+        "error": "INVALID_REQUEST",
+        "reason": "previous_version"
+      }
+    }
+  ]
+}

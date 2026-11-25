@@ -1,0 +1,700 @@
+{
+  "description": "ReadGrant bearer tokens: EIP-712 hashes, signatures and the service's verdict on the checks that need no state. See README.md.",
+  "hosted_signers": [
+    "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+  ],
+  "max_token_bytes": 4096,
+  "max_grant_secs": 28800,
+  "domain": {
+    "name": "Reya Workflows",
+    "version": "1"
+  },
+  "domain_separator": "0xfb5e35bedf3c94b21514b955cb1ae000874eadcc5814d966fd2f252d395f1a09",
+  "primary_type": "ReadGrant",
+  "types": {
+    "ReadGrant": [
+      {
+        "name": "verifyingChainId",
+        "type": "uint256"
+      },
+      {
+        "name": "environment",
+        "type": "string"
+      },
+      {
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "name": "accountIds",
+        "type": "uint128[]"
+      },
+      {
+        "name": "expiresAt",
+        "type": "uint64"
+      },
+      {
+        "name": "salt",
+        "type": "bytes16"
+      }
+    ]
+  },
+  "encode_type": "ReadGrant(uint256 verifyingChainId,string environment,address owner,uint128[] accountIds,uint64 expiresAt,bytes16 salt)",
+  "type_hash": "0x4d1669a3c6c6f1df3883c5fc036157a01c331ff8eee270d3899f1708c9fe074d",
+  "keys": {
+    "owner": {
+      "private_key": "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d",
+      "address": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    "agent": {
+      "private_key": "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a",
+      "address": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+    },
+    "hosted": {
+      "private_key": "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6",
+      "address": "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+    },
+    "stranger": {
+      "private_key": "0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a",
+      "address": "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65"
+    }
+  },
+  "cases": [
+    {
+      "name": "the agent key grants every account of the owner for an hour",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHgwZjYxZDA5MWUzMWM3NzIzNDc4MmRlZTNjM2YzYmJmYmUwMDM1YWQ2OTc3NjM2MzdiZmQ0NjFiNDUxODcxNTc1NTE5ODVhYzM3MjE0YjUyM2Y3MTllN2I3Mjc3MzY2ZTI5NTI1ZTFkN2IwYWNmYTJmZDQyNmM2ZWNjNDFkZjMxODFiIn0",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x0f61d091e31c77234782dee3c3f3bbfbe0035ad697763637bfd461b45187157551985ac37214b523f719e7b7277366e29525e1d7b0acfa2fd426c6ecc41df3181b"
+      },
+      "struct_hash": "0xb33cac523916e8bbe0894e207a9da9a5170fba8a8eed5a0ecd12cde0db2ec622",
+      "digest": "0x3884b16709f477e70623e0af39359ee2499d446d5adad8ce98a5c560ea30fcb6",
+      "expect": {
+        "ok": true,
+        "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      }
+    },
+    {
+      "name": "the agent key grants two named accounts",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOlsiMTIzNDU2IiwiMTAwMDAwMDAzOTUiXSwiZXhwaXJlc0F0IjoiMTc5MjM3MTYwMCIsInNhbHQiOiIweDAwMDEwMjAzMDQwNTA2MDcwODA5MGEwYjBjMGQwZTBmIn0sInNpZ25hdHVyZSI6IjB4YzlkOWE3ZWFkMDU3MGFjNjgxN2Y3ZTQ4Mzg0NzMyN2M5MDc5NjcwNTUzYjM1ZTRjNWY2YmUzMDJjNGFjNmZjMDdiY2NiOGIwY2Y1ZjU4MTMxYjcyOGQ4MGRlMjkzOTc3NWQzMWU3OTMzNzFkMzlhMGU3ZWNiZmE0MGJjODAxZTYxYiJ9",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [
+            "123456",
+            "10000000395"
+          ],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0xc9d9a7ead0570ac6817f7e483847327c9079670553b35e4c5f6be302c4ac6fc07bccb8b0cf5f58131b728d80de2939775d31e793371d39a0e7ecbfa40bc801e61b"
+      },
+      "struct_hash": "0x2f32cd1f7fc86fedfcc4a1c5e61426527145abdc8a4a0b17c71b9910c874e69d",
+      "digest": "0x0114ba47bed4f18924284e68b903b3cb7b2bb56fe4bac2fae8a1803b787f8233",
+      "expect": {
+        "ok": true,
+        "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      }
+    },
+    {
+      "name": "the largest uint128 account ID",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOlsiMzQwMjgyMzY2OTIwOTM4NDYzNDYzMzc0NjA3NDMxNzY4MjExNDU1Il0sImV4cGlyZXNBdCI6IjE3OTIzNzE2MDAiLCJzYWx0IjoiMHgwMDAxMDIwMzA0MDUwNjA3MDgwOTBhMGIwYzBkMGUwZiJ9LCJzaWduYXR1cmUiOiIweDcwNTg4OGJkZGJiNGJkMmY0NmQ0YjM3MTI2OWVmNmNmZDVlNjBhZDEzOTgzZjNmNDZjOTZjYTRiNmNiZmQ1OWU1MDY5YjFjMGVmM2ZhOTUyYjMxNWZjOTgxYWY5MGFjMTA2ODY1Y2UxYTljZmE5MzQxMzA2OWYzZGM1YTQzYzQzMWIifQ",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [
+            "340282366920938463463374607431768211455"
+          ],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x705888bddbb4bd2f46d4b371269ef6cfd5e60ad13983f3f46c96ca4b6cbfd59e5069b1c0ef3fa952b315fc981af90ac106865ce1a9cfa93413069f3dc5a43c431b"
+      },
+      "struct_hash": "0xd89d60d3f9dc3139bdaab3fea69d20d5e23d1a41372c46be0e4b0f89d315234e",
+      "digest": "0xffb015e595992f0e9b4be5ae5f4abe56478bd9b773263232ad8de08a5b2f787d",
+      "expect": {
+        "ok": true,
+        "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      }
+    },
+    {
+      "name": "expiring exactly eight hours ahead",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzk2ODAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHhjY2FiNTUyZGFiODMxNDJjZjllZjQ3ZDExNTkwMWE3MjY1NDE3ZGNmNDEyODlkMGNiNzMwZDJjMTNkMDQzZDdkMWJjNzI4YzhlZDQ0YzI3MDEzYzQ1NDljOGRmYmVmMTRiMjU3NjgyMmFiNjA3YzE4YjE2MmRhMjI1Y2FkM2MwMDFjIn0",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792396800",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0xccab552dab83142cf9ef47d115901a7265417dcf41289d0cb730d2c13d043d7d1bc728c8ed44c27013c4549c8dfbef14b2576822ab607c18b162da225cad3c001c"
+      },
+      "struct_hash": "0x95f617c2a49ed5839772ba2585afa4ce2a3d5486ee51dd56ff257b506c97b39a",
+      "digest": "0x16391bd6a5dea8a020f745fc5bfbc7d79debfed65289a7130fb502af989251cd",
+      "expect": {
+        "ok": true,
+        "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      }
+    },
+    {
+      "name": "v as 0 or 1 reads as 27 or 28",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHgwZjYxZDA5MWUzMWM3NzIzNDc4MmRlZTNjM2YzYmJmYmUwMDM1YWQ2OTc3NjM2MzdiZmQ0NjFiNDUxODcxNTc1NTE5ODVhYzM3MjE0YjUyM2Y3MTllN2I3Mjc3MzY2ZTI5NTI1ZTFkN2IwYWNmYTJmZDQyNmM2ZWNjNDFkZjMxODAwIn0",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x0f61d091e31c77234782dee3c3f3bbfbe0035ad697763637bfd461b45187157551985ac37214b523f719e7b7277366e29525e1d7b0acfa2fd426c6ecc41df31800"
+      },
+      "struct_hash": "0xb33cac523916e8bbe0894e207a9da9a5170fba8a8eed5a0ecd12cde0db2ec622",
+      "digest": "0x3884b16709f477e70623e0af39359ee2499d446d5adad8ce98a5c560ea30fcb6",
+      "expect": {
+        "ok": true,
+        "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      }
+    },
+    {
+      "name": "a padded token",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHgwZjYxZDA5MWUzMWM3NzIzNDc4MmRlZTNjM2YzYmJmYmUwMDM1YWQ2OTc3NjM2MzdiZmQ0NjFiNDUxODcxNTc1NTE5ODVhYzM3MjE0YjUyM2Y3MTllN2I3Mjc3MzY2ZTI5NTI1ZTFkN2IwYWNmYTJmZDQyNmM2ZWNjNDFkZjMxODFiIn0=",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x0f61d091e31c77234782dee3c3f3bbfbe0035ad697763637bfd461b45187157551985ac37214b523f719e7b7277366e29525e1d7b0acfa2fd426c6ecc41df3181b"
+      },
+      "struct_hash": "0xb33cac523916e8bbe0894e207a9da9a5170fba8a8eed5a0ecd12cde0db2ec622",
+      "digest": "0x3884b16709f477e70623e0af39359ee2499d446d5adad8ce98a5c560ea30fcb6",
+      "expect": {
+        "ok": true,
+        "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      }
+    },
+    {
+      "name": "a lower-case scheme",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "authorization": "bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHgwZjYxZDA5MWUzMWM3NzIzNDc4MmRlZTNjM2YzYmJmYmUwMDM1YWQ2OTc3NjM2MzdiZmQ0NjFiNDUxODcxNTc1NTE5ODVhYzM3MjE0YjUyM2Y3MTllN2I3Mjc3MzY2ZTI5NTI1ZTFkN2IwYWNmYTJmZDQyNmM2ZWNjNDFkZjMxODFiIn0",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x0f61d091e31c77234782dee3c3f3bbfbe0035ad697763637bfd461b45187157551985ac37214b523f719e7b7277366e29525e1d7b0acfa2fd426c6ecc41df3181b"
+      },
+      "struct_hash": "0xb33cac523916e8bbe0894e207a9da9a5170fba8a8eed5a0ecd12cde0db2ec622",
+      "digest": "0x3884b16709f477e70623e0af39359ee2499d446d5adad8ce98a5c560ea30fcb6",
+      "expect": {
+        "ok": true,
+        "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      }
+    },
+    {
+      "name": "the named accounts' signature sent with none named: another signer",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHhjOWQ5YTdlYWQwNTcwYWM2ODE3ZjdlNDgzODQ3MzI3YzkwNzk2NzA1NTNiMzVlNGM1ZjZiZTMwMmM0YWM2ZmMwN2JjY2I4YjBjZjVmNTgxMzFiNzI4ZDgwZGUyOTM5Nzc1ZDMxZTc5MzM3MWQzOWEwZTdlY2JmYTQwYmM4MDFlNjFiIn0",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0xc9d9a7ead0570ac6817f7e483847327c9079670553b35e4c5f6be302c4ac6fc07bccb8b0cf5f58131b728d80de2939775d31e793371d39a0e7ecbfa40bc801e61b"
+      },
+      "struct_hash": "0xb33cac523916e8bbe0894e207a9da9a5170fba8a8eed5a0ecd12cde0db2ec622",
+      "digest": "0x3884b16709f477e70623e0af39359ee2499d446d5adad8ce98a5c560ea30fcb6",
+      "expect": {
+        "ok": true,
+        "signer": "0x54698C35310a5fbf116b3DBe05f9e4028bA4eFB8"
+      }
+    },
+    {
+      "name": "signed under the order domain: another signer",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHg4OWU2ODBjNDQxNWU5Yzg4YTI5ZTA2ZTkxNTBjYjBjZTRhYzc3MDUyYjg3NTRmZjVlZDJiZDg3NTQ2MTdmNzU5M2Q1ODA4N2JkN2Q0YmU0MzIxZDQwMjVhODZhYjc0NGVjZjIyOTYwYjVjZmJkMzdkYWY5MTE0NDYzMWRjYTYzNDFjIn0",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x89e680c4415e9c88a29e06e9150cb0ce4ac77052b8754ff5ed2bd8754617f7593d58087bd7d4be4321d4025a86ab744ecf22960b5cfbd37daf91144631dca6341c"
+      },
+      "struct_hash": "0xb33cac523916e8bbe0894e207a9da9a5170fba8a8eed5a0ecd12cde0db2ec622",
+      "digest": "0x3884b16709f477e70623e0af39359ee2499d446d5adad8ce98a5c560ea30fcb6",
+      "expect": {
+        "ok": true,
+        "signer": "0x4Fee84549ae459D07dd761e5B7f062C6Ec8d6eBd"
+      }
+    },
+    {
+      "name": "the owner signs its own grant",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "owner",
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHhkYzExMGYwODQ5N2JhYWI2MWQ4MjA0YTU5NGY3ZDY4OTRjYWQ2ZjUyMWYzYzNmNDQxNGFjZGExZjg0NmIzY2Q1NjNhYzhmOWNhOTEyZmVmMDc4YmUyY2ZkNDIwZjQyNWMxN2NiOWJlNTk1MzZjNzdjOTk5ZjRkMDkwYTRkODJkNjFjIn0",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0xdc110f08497baab61d8204a594f7d6894cad6f521f3c3f4414acda1f846b3cd563ac8f9ca912fef078be2cfd420f425c17cb9be59536c77c999f4d090a4d82d61c"
+      },
+      "struct_hash": "0xb33cac523916e8bbe0894e207a9da9a5170fba8a8eed5a0ecd12cde0db2ec622",
+      "digest": "0x3884b16709f477e70623e0af39359ee2499d446d5adad8ce98a5c560ea30fcb6",
+      "expect": {
+        "error": "INVALID_READ_GRANT",
+        "reason": "owner_signed"
+      }
+    },
+    {
+      "name": "the hosted signer signs a grant",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "hosted",
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHg1ZDdkNjYxMzIxZmU1YmMzYTMxYjljYjdiNGI3MDVmNDlkMDMyZGVmNDQ1ODk4NzlmOGJkMDY1MDg5NDExYmNiNzJhYWEyNmVkMDk4YWViZDMwMzIyODlhMTc0MGNjMTJkZjNkNWI2MDA3YWJiOWU1NWQ1MmRhZmI3MGRiMWQ1ZTFiIn0",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x5d7d661321fe5bc3a31b9cb7b4b705f49d032def44589879f8bd065089411bcb72aaa26ed098aebd3032289a1740cc12df3d5b6007abb9e55d52dafb70db1d5e1b"
+      },
+      "struct_hash": "0xb33cac523916e8bbe0894e207a9da9a5170fba8a8eed5a0ecd12cde0db2ec622",
+      "digest": "0x3884b16709f477e70623e0af39359ee2499d446d5adad8ce98a5c560ea30fcb6",
+      "expect": {
+        "error": "INVALID_READ_GRANT",
+        "reason": "hosted_signer"
+      }
+    },
+    {
+      "name": "expiring now",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzY4MDAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHhmZGYxOTE2OTljNTI3MjgyMzI5NTkzYmY1NGI3ODMzNmZkYzgzZTU2NGFlZmJmYzE1MzVlMTE5ZGVmYWNkMmMxN2I3NzJjYjI2Y2RkNTYzMDkyY2RjMTkzNTM0YTJhZDFkNDVkNDZmZjA4NTY4YWU5OWI0NjE2YTU3ODRjMjM5YzFiIn0",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792368000",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0xfdf191699c527282329593bf54b78336fdc83e564aefbfc1535e119defacd2c17b772cb26cdd563092cdc193534a2ad1d45d46ff08568ae99b4616a5784c239c1b"
+      },
+      "struct_hash": "0xdaeb77bd0e903357b83913fbd94457a7e227bb77e7e5cdce63b24b72cde70e2e",
+      "digest": "0x7ed7f2562c82c38bf170ae4c42bac623bc3c7182a9afea5cb950c016df64b419",
+      "expect": {
+        "error": "INVALID_READ_GRANT",
+        "reason": "expired"
+      }
+    },
+    {
+      "name": "expiring eight hours and a second ahead",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzk2ODAxIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHg2NjIyMjdjOTVmMDc4YzMwZjgzZjYzMzA3ZGM2NTU2MjVmYzY0OGMxMTQ0NTEzYjFmNzI2ZjQ0ZjA5ZGNlNjZiNmFhNDM4MGI0NTM4OGIxZTgxOWVjYTdlM2FkZWI4NjAwZDlhZTYzMjY1MmNiN2Q1YzAwODdlOTA3NjRjZjk1MzFiIn0",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792396801",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x662227c95f078c30f83f63307dc655625fc648c1144513b1f726f44f09dce66b6aa4380b45388b1e819eca7e3adeb8600d9ae632652cb7d5c0087e90764cf9531b"
+      },
+      "struct_hash": "0x2d5a0da713aede72a7c378b68f060ecafa16c426f4f274338e58fc5748019396",
+      "digest": "0x40644cbef983eff562a88fc14b37e46d65d09f4f1d78ad9b972f8841362bcf30",
+      "expect": {
+        "error": "INVALID_READ_GRANT",
+        "reason": "expires_too_late"
+      }
+    },
+    {
+      "name": "testnet named on a devnet1 service",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6InRlc3RuZXQiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHg0YTYyYTU4MDNlOTU5MDA3MzQ0NjYyODBkMzBjNmJiZmU0ZjZmZDE1YjIwM2I0MzliN2FmOTFmYzBhZjU3NmQzN2JmMDRkZDdlZDlhZDE2MzRkZjU2NjYxNDZiYThhYWQ2MThkMTBjNDdmYmU2MTUzOWVlNzJjZDU2YjEyNTM2NTFiIn0",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "testnet",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x4a62a5803e95900734466280d30c6bbfe4f6fd15b203b439b7af91fc0af576d37bf04dd7ed9ad1634df5666146ba8aad618d10c47fbe61539ee72cd56b1253651b"
+      },
+      "struct_hash": "0xef0642021b5579469c40f4499d16c030d25a6593347f4a263211bf615107d970",
+      "digest": "0x2ca42f81aee87344a5f199072b45de4b4ad975036b858821e3c1fb4a92bfcc56",
+      "expect": {
+        "error": "INVALID_READ_GRANT",
+        "reason": "wrong_environment"
+      }
+    },
+    {
+      "name": "the mainnet chain named on a devnet1 service",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiMTcyOSIsImVudmlyb25tZW50IjoiZGV2bmV0MSIsIm93bmVyIjoiMHg3MDk5Nzk3MEM1MTgxMmRjM0EwMTBDN2QwMWI1MGUwZDE3ZGM3OUM4IiwiYWNjb3VudElkcyI6W10sImV4cGlyZXNBdCI6IjE3OTIzNzE2MDAiLCJzYWx0IjoiMHgwMDAxMDIwMzA0MDUwNjA3MDgwOTBhMGIwYzBkMGUwZiJ9LCJzaWduYXR1cmUiOiIweGU3MDg2MzZjNTRkYzg5YWQwNGMxOWQ1NmZmYmI5OTg1NDZlMGEyZGNmZjEwZjM4MDJjNDFkZWYzZmU5ODNhOTY3NzM0NGFkZTE1ZDcxZjViNjNjM2Q1ZDQ2NDU1MmI5YWJhOWI2N2ZiMDMzNTdiZmE3YTE5MDc4MTZmMDI0YzI1MWIifQ",
+      "token": {
+        "grant": {
+          "verifyingChainId": "1729",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0xe708636c54dc89ad04c19d56ffbb998546e0a2dcff10f3802c41def3fe983a9677344ade15d71f5b63c3d5d464552b9aba9b67fb03357bfa7a1907816f024c251b"
+      },
+      "struct_hash": "0x36b5f131e6bc248ed204c42bc0aa3adcae8efe32db0e08310ce9046deb152f94",
+      "digest": "0xb45b491b6d77d4c8ec5ea2cadcd1565bc94d8e7cb365c20e7003912c459df647",
+      "expect": {
+        "error": "INVALID_READ_GRANT",
+        "reason": "wrong_environment"
+      }
+    },
+    {
+      "name": "a high s",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "signed_by": "agent",
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHgwZjYxZDA5MWUzMWM3NzIzNDc4MmRlZTNjM2YzYmJmYmUwMDM1YWQ2OTc3NjM2MzdiZmQ0NjFiNDUxODcxNTc1YWU2N2E1M2M4ZGViNGFkYzA4ZTYxODQ4ZDg4Yzk5MWMyNTg4ZmIwZWZlOWJhNjBiZWJhYjk3YTAwYzE4NGUyOTFjIn0",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x0f61d091e31c77234782dee3c3f3bbfbe0035ad697763637bfd461b451871575ae67a53c8deb4adc08e61848d88c991c2588fb0efe9ba60bebab97a00c184e291c"
+      },
+      "struct_hash": "0xb33cac523916e8bbe0894e207a9da9a5170fba8a8eed5a0ecd12cde0db2ec622",
+      "digest": "0x3884b16709f477e70623e0af39359ee2499d446d5adad8ce98a5c560ea30fcb6",
+      "expect": {
+        "error": "INVALID_READ_GRANT",
+        "reason": "bad_signature"
+      }
+    },
+    {
+      "name": "a 64-byte signature",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHgwZjYxZDA5MWUzMWM3NzIzNDc4MmRlZTNjM2YzYmJmYmUwMDM1YWQ2OTc3NjM2MzdiZmQ0NjFiNDUxODcxNTc1NTE5ODVhYzM3MjE0YjUyM2Y3MTllN2I3Mjc3MzY2ZTI5NTI1ZTFkN2IwYWNmYTJmZDQyNmM2ZWNjNDFkZjMxOCJ9",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x0f61d091e31c77234782dee3c3f3bbfbe0035ad697763637bfd461b45187157551985ac37214b523f719e7b7277366e29525e1d7b0acfa2fd426c6ecc41df318"
+      },
+      "struct_hash": "0xb33cac523916e8bbe0894e207a9da9a5170fba8a8eed5a0ecd12cde0db2ec622",
+      "digest": "0x3884b16709f477e70623e0af39359ee2499d446d5adad8ce98a5c560ea30fcb6",
+      "expect": {
+        "error": "INVALID_READ_GRANT",
+        "reason": "bad_signature"
+      }
+    },
+    {
+      "name": "an account ID with a leading zero",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOlsiMDEyMzQ1NiJdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHgwZjYxZDA5MWUzMWM3NzIzNDc4MmRlZTNjM2YzYmJmYmUwMDM1YWQ2OTc3NjM2MzdiZmQ0NjFiNDUxODcxNTc1NTE5ODVhYzM3MjE0YjUyM2Y3MTllN2I3Mjc3MzY2ZTI5NTI1ZTFkN2IwYWNmYTJmZDQyNmM2ZWNjNDFkZjMxODFiIn0",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [
+            "0123456"
+          ],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x0f61d091e31c77234782dee3c3f3bbfbe0035ad697763637bfd461b45187157551985ac37214b523f719e7b7277366e29525e1d7b0acfa2fd426c6ecc41df3181b"
+      },
+      "expect": {
+        "error": "INVALID_READ_GRANT",
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "an account ID as a JSON number",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOlsxMjM0NTZdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHgwZjYxZDA5MWUzMWM3NzIzNDc4MmRlZTNjM2YzYmJmYmUwMDM1YWQ2OTc3NjM2MzdiZmQ0NjFiNDUxODcxNTc1NTE5ODVhYzM3MjE0YjUyM2Y3MTllN2I3Mjc3MzY2ZTI5NTI1ZTFkN2IwYWNmYTJmZDQyNmM2ZWNjNDFkZjMxODFiIn0",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [
+            123456
+          ],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x0f61d091e31c77234782dee3c3f3bbfbe0035ad697763637bfd461b45187157551985ac37214b523f719e7b7277366e29525e1d7b0acfa2fd426c6ecc41df3181b"
+      },
+      "expect": {
+        "error": "INVALID_READ_GRANT",
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "expiresAt as a JSON number",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOjE3OTIzNzE2MDAsInNhbHQiOiIweDAwMDEwMjAzMDQwNTA2MDcwODA5MGEwYjBjMGQwZTBmIn0sInNpZ25hdHVyZSI6IjB4MGY2MWQwOTFlMzFjNzcyMzQ3ODJkZWUzYzNmM2JiZmJlMDAzNWFkNjk3NzYzNjM3YmZkNDYxYjQ1MTg3MTU3NTUxOTg1YWMzNzIxNGI1MjNmNzE5ZTdiNzI3NzM2NmUyOTUyNWUxZDdiMGFjZmEyZmQ0MjZjNmVjYzQxZGYzMTgxYiJ9",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": 1792371600,
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x0f61d091e31c77234782dee3c3f3bbfbe0035ad697763637bfd461b45187157551985ac37214b523f719e7b7277366e29525e1d7b0acfa2fd426c6ecc41df3181b"
+      },
+      "expect": {
+        "error": "INVALID_READ_GRANT",
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "a 32-byte salt",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCJ9LCJzaWduYXR1cmUiOiIweDBmNjFkMDkxZTMxYzc3MjM0NzgyZGVlM2MzZjNiYmZiZTAwMzVhZDY5Nzc2MzYzN2JmZDQ2MWI0NTE4NzE1NzU1MTk4NWFjMzcyMTRiNTIzZjcxOWU3YjcyNzczNjZlMjk1MjVlMWQ3YjBhY2ZhMmZkNDI2YzZlY2M0MWRmMzE4MWIifQ",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "signature": "0x0f61d091e31c77234782dee3c3f3bbfbe0035ad697763637bfd461b45187157551985ac37214b523f719e7b7277366e29525e1d7b0acfa2fd426c6ecc41df3181b"
+      },
+      "expect": {
+        "error": "INVALID_READ_GRANT",
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "an unknown field",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYiLCJzaWduZXIiOiIweDNDNDRDZERkQjZhOTAwZmEyYjU4NWRkMjk5ZTAzZDEyRkE0MjkzQkMifSwic2lnbmF0dXJlIjoiMHgwZjYxZDA5MWUzMWM3NzIzNDc4MmRlZTNjM2YzYmJmYmUwMDM1YWQ2OTc3NjM2MzdiZmQ0NjFiNDUxODcxNTc1NTE5ODVhYzM3MjE0YjUyM2Y3MTllN2I3Mjc3MzY2ZTI5NTI1ZTFkN2IwYWNmYTJmZDQyNmM2ZWNjNDFkZjMxODFiIn0",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f",
+          "signer": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+        },
+        "signature": "0x0f61d091e31c77234782dee3c3f3bbfbe0035ad697763637bfd461b45187157551985ac37214b523f719e7b7277366e29525e1d7b0acfa2fd426c6ecc41df3181b"
+      },
+      "expect": {
+        "error": "INVALID_READ_GRANT",
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "standard base64, not base64url",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "authorization": "Bearer +//7//v/+//7//v/+//7/w==",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x0f61d091e31c77234782dee3c3f3bbfbe0035ad697763637bfd461b45187157551985ac37214b523f719e7b7277366e29525e1d7b0acfa2fd426c6ecc41df3181b"
+      },
+      "expect": {
+        "error": "INVALID_READ_GRANT",
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "no Bearer scheme",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "authorization": "eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHgwZjYxZDA5MWUzMWM3NzIzNDc4MmRlZTNjM2YzYmJmYmUwMDM1YWQ2OTc3NjM2MzdiZmQ0NjFiNDUxODcxNTc1NTE5ODVhYzM3MjE0YjUyM2Y3MTllN2I3Mjc3MzY2ZTI5NTI1ZTFkN2IwYWNmYTJmZDQyNmM2ZWNjNDFkZjMxODFiIn0",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x0f61d091e31c77234782dee3c3f3bbfbe0035ad697763637bfd461b45187157551985ac37214b523f719e7b7277366e29525e1d7b0acfa2fd426c6ecc41df3181b"
+      },
+      "expect": {
+        "error": "INVALID_READ_GRANT",
+        "reason": "malformed"
+      }
+    },
+    {
+      "name": "a token over 4096 bytes",
+      "context": {
+        "environment": "devnet1",
+        "now": "1792368000"
+      },
+      "authorization": "Bearer eyJncmFudCI6eyJ2ZXJpZnlpbmdDaGFpbklkIjoiODkzNDYxNjIiLCJlbnZpcm9ubWVudCI6ImRldm5ldDEiLCJvd25lciI6IjB4NzA5OTc5NzBDNTE4MTJkYzNBMDEwQzdkMDFiNTBlMGQxN2RjNzlDOCIsImFjY291bnRJZHMiOltdLCJleHBpcmVzQXQiOiIxNzkyMzcxNjAwIiwic2FsdCI6IjB4MDAwMTAyMDMwNDA1MDYwNzA4MDkwYTBiMGMwZDBlMGYifSwic2lnbmF0dXJlIjoiMHgwZjYxZDA5MWUzMWM3NzIzNDc4MmRlZTNjM2YzYmJmYmUwMDM1YWQ2OTc3NjM2MzdiZmQ0NjFiNDUxODcxNTc1NTE5ODVhYzM3MjE0YjUyM2Y3MTllN2I3Mjc3MzY2ZTI5NTI1ZTFkN2IwYWNmYTJmZDQyNmM2ZWNjNDFkZjMxODFiIiwicGFkIjoieHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eCJ9",
+      "token": {
+        "grant": {
+          "verifyingChainId": "89346162",
+          "environment": "devnet1",
+          "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+          "accountIds": [],
+          "expiresAt": "1792371600",
+          "salt": "0x000102030405060708090a0b0c0d0e0f"
+        },
+        "signature": "0x0f61d091e31c77234782dee3c3f3bbfbe0035ad697763637bfd461b45187157551985ac37214b523f719e7b7277366e29525e1d7b0acfa2fd426c6ecc41df3181b",
+        "pad": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      },
+      "expect": {
+        "error": "INVALID_READ_GRANT",
+        "reason": "too_large"
+      }
+    }
+  ]
+}
